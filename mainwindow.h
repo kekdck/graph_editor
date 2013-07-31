@@ -9,7 +9,7 @@
 #include <QFileSystemModel>
 #include <QTreeView>
 #include <QDirModel>
-
+#include <QDebug>
 
 #include "graphitem.h"
 
@@ -30,14 +30,11 @@ private slots:
 
     void on_pushAddButton_clicked();
 
-    void on_splitter_splitterMoved(int pos, int index);
-
 private:
     Ui::MainWindow *ui;
 
 //File model & tree view of files
     QDirModel* model;
-    QTreeView treeView;
 
 //Graph's members
     QList< GraphItem * > list;

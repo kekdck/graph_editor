@@ -1,13 +1,18 @@
 #ifndef GRAPHITEM_H
 #define GRAPHITEM_H
 
+
 #include <QGraphicsItem>
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
 #include <QString>
 #include <QPainter>
 #include <QGraphicsScene>
+#include <QFile>
+#include <QTreeView>
 #include <QDirModel>
+#include <QMessageBox>
+#include <QDebug>
 
 //вообще это модифицированный квадратик
 class GraphItem: public QGraphicsRectItem
@@ -18,6 +23,7 @@ public:
     void setFile(QModelIndex index, QDirModel *model);
     QString fileName(QDirModel *model);
 
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 protected:
 
@@ -26,8 +32,7 @@ private:
     QGraphicsTextItem *nameText;
 
     QModelIndex fileIndex;
-    //Really? Do we need treeModel in EVERY graphitem? Maybe change to QFile or smth similar?
-    QDirModel* treeModel;
+    QDirModel *dirModel;
 };
 
 #endif // GRAPHITEM_H
