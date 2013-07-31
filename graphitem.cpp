@@ -1,5 +1,4 @@
 #include "graphitem.h"
-#include <QGraphicsScene>
 
 GraphItem::GraphItem(qreal x, qreal y, qreal width, qreal height, QString name, QGraphicsItem * parent):
     QGraphicsRectItem(x, y, width, height, parent)
@@ -19,12 +18,22 @@ void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawRect(rect());
 }
 
-void GraphItem::setFile(QString file)
+void GraphItem::setFile(QModelIndex index, QDirModel *model)
 {
-    path = file;
+    //Вообще вставляется не только файл, но и вообще все что угодно, возможно не стоит использовать индексы
+    fileIndex = index;
+    treeModel = model;
+    //Задаем заголовку нода имя вставляемого файла и смещаем его в центр
+    nameText->setPlainText(model->fileInfo(fileIndex).fileName());
+    nameText->setPos(QPointF(boundingRect().width() - nameText->boundingRect().width()/2,-10));
 }
 
-void static GraphItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+QString GraphItem::fileName(QDirModel *model)
 {
-    QGraphicsItem::mousePressEvent(event);   
+    return model->fileInfo(fileIndex).fileName();
 }
+
+//void static GraphItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+//{
+//    QGraphicsItem::mousePressEvent(event);
+//}

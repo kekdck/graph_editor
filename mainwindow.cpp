@@ -11,9 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //dialog = new addElementDialog(this);
 
     //Установка обозревания файлов в treeView
-    model.setRootPath("");
-    ui->treeView->setModel(&model);
-    ui->treeView->setBaseSize(250, 600);
+    model = new QDirModel(this);
+    ui->treeView->setModel(model);
+
+    QModelIndex index = model->index("/");
+    ui->treeView->setCurrentIndex(index);
+    ui->treeView->resizeColumnToContents(1);
+
 
     //Настройка окна параметров GraphItem
     //ui->treeWidget->header()->setBaseSize(50, 15);
@@ -34,24 +38,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushAddButton_clicked()
 {
+    //выбираем выделенный в treeview элемент
+    QModelIndex index = ui->treeView->currentIndex();
+    if(!index.isValid()) return;
 
-//    GraphItem* item = new GraphItem(10, 10, 20, 20, QString::number(list.size()));
-//    scene->addItem(item);
+    GraphItem* item = new GraphItem(10, 10, 20, 20, QString::number(list.size()));
+    item->setFile(index, model);
+    scene->addItem(item);
    
-//    list.push_back(item);
+    list.push_back(item);
 
-    QModelIndexList list = ui->treeView->selectionModel()->selectedIndexes();
-    QDirModel* model = (QDirModel*)ui->treeView->model();
-    int row = -1;
-    foreach (QModelIndex index, list)
-    {
-        if (index.row()!=row && index.column()==0)
-        {
-            QFileInfo fileInfo = model->fileInfo(index);
-            qDebug() << fileInfo.fileName() << '\n';
-            row = index.row();
-        }
-    }
+
+    //Вывод в консоль имя вставляемого в нод файла
+    qDebug() << "Pushed index" <<  item->fileName(model);
 }
 
 void MainWindow::on_pushRemoveButton_clicked()
@@ -63,6 +62,9 @@ void MainWindow::on_pushRemoveButton_clicked()
     }
     scene->removeItem(list.last());
     list.pop_back();
+
+
+
 }
 
 

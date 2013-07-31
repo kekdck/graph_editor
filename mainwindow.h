@@ -8,6 +8,8 @@
 #include <QList>
 #include <QFileSystemModel>
 #include <QTreeView>
+#include <QDirModel>
+
 
 #include "graphitem.h"
 
@@ -34,7 +36,7 @@ private:
     Ui::MainWindow *ui;
 
 //File model & tree view of files
-    QFileSystemModel model;
+    QDirModel* model;
     QTreeView treeView;
 
 //Graph's members
