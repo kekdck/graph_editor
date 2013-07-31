@@ -26,6 +26,7 @@ private:
     QGraphicsTextItem *nameText;
 
     QModelIndex fileIndex;
+    //Really? Do we need treeModel in EVERY graphitem? Maybe change to QFile or smth similar?
     QDirModel* treeModel;
 };
 
