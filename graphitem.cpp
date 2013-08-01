@@ -16,6 +16,8 @@ GraphItem::GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem 
 void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     prepareGeometryChange();
+    painter->setBrush(brush());
+    painter->setPen(pen());
     painter->drawRect(rect());
 }
 
