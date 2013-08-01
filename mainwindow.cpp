@@ -7,24 +7,17 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //Установка обозревания файлов в treeView
+    //Setting up model and treeView
     model = new QDirModel(this);
+    model->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name);
     ui->treeView->setModel(model);
 
     QModelIndex index = model->index("/");
     ui->treeView->setCurrentIndex(index);
     ui->treeView->resizeColumnToContents(1);
 
-    //Настройка окна параметров GraphItem
-    //ui->treeWidget->header()->setBaseSize(50, 15);
-
-    //Установка сцены
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
-
-    //GraphItem* newItem = new GraphItem(10, 10, 10, 10);
-
-
 }
 
 MainWindow::~MainWindow()
@@ -34,30 +27,32 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushAddButton_clicked()
 {
-    //выбираем выделенный в treeview элемент
+    //get selected item in treeView
     QModelIndex index = ui->treeView->currentIndex();
     if(!index.isValid()) return;
 
-    GraphItem* item = new GraphItem(10, 10, 20, 20, QString::number(list.size()));
+    GraphItem* item = new GraphItem(10, 10, 20, 20);
+    if (model->isDir(index))
+    {
+        item->setBrush(QBrush(Qt::yellow));
+    }
+    else
+    {
+        item->setBrush(QBrush(Qt::blue));
+    }
     item->setFile(index, model);
     scene->addItem(item);
 
     list.push_back(item);
 
-    //Вывод в консоль имя вставляемого в нод файла
-    qDebug() << "Pushed index" <<  item->fileName(model);
+#ifdef QT_DEBUG
+    qDebug() << "Pushed index" <<  item->fileName();
+#endif //QT_DEBUG
 }
 
 void MainWindow::on_pushRemoveButton_clicked()
 {
-    //Удаление последнего QGraphicsItem из списка
-    if (list.empty())
-    {
-        return;
-    }
+    if (list.empty()) return;
     scene->removeItem(list.last());
     list.pop_back();
-
-
-
 }

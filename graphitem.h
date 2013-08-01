@@ -14,14 +14,13 @@
 #include <QMessageBox>
 #include <QDebug>
 
-//вообще это модифицированный квадратик
 class GraphItem: public QGraphicsRectItem
 {
 public:
-    GraphItem(qreal x, qreal y, qreal width, qreal height, QString name, QGraphicsItem* parent = 0);
+    GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem* parent = 0);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void setFile(QModelIndex index, QDirModel *model);
-    QString fileName(QDirModel *model);
+    QString fileName();
 
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
