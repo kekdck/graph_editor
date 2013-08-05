@@ -1,34 +1,36 @@
 #include "graphedge.h"
+#include "graphitem.h"
 
-GraphEdge::GraphEdge(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent):
-    QGraphicsLineItem(x1, y1, x2, y2, parent)
+GraphEdge::GraphEdge(GraphItem *source, GraphItem *destin, QGraphicsItem *parent):
+    QGraphicsLineItem(source->boundingRect().center().x(), source->boundingRect().center().y(),
+                      destin->boundingRect().center().x(), destin->boundingRect().center().y(), parent)
 {
-    sourcePoint.setX(x1);
-    sourcePoint.setY(y2);
-    destPoint.setX(x2);
-    destPoint.setY(y2);
-
+    src = source;
+    dest = destin;
     setAcceptedMouseButtons(0);
+    setPen(QPen(Qt::black));
 }
 
-void GraphEdge::adjustSource(QPointF &source)
+void GraphEdge::setSource(GraphItem *source)
 {
     prepareGeometryChange();
-    sourcePoint = source;
+    src = source;
 }
 
-void GraphEdge::adjustDest(QPointF &dest)
+
+void GraphEdge::setDest(GraphItem *destin)
 {
     prepareGeometryChange();
-    sourcePoint = dest;
+    dest = destin;
 }
 
 void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QLineF line(sourcePoint, destPoint);
-
-    painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter->drawLine(line);
-
+    painter->setPen(pen());
+#ifdef QT_DEBUG
+    qDebug() << "called paint graphedge from" << src->fileName() << " to " << dest->fileName();
+    qDebug() << "drawing from " << src->boundingRect().center() << " to " << dest->boundingRect().center();
+#endif //QT_DEBUG
+    painter->drawLine(src->boundingRect().center(), dest->boundingRect().center());
 }
 

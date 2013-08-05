@@ -1,4 +1,6 @@
 #ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
@@ -11,7 +13,6 @@
 
 #include "graphitem.h"
 #include "graphedge.h"
-#define MAINWINDOW_H
 
 
 namespace Ui {
@@ -35,7 +36,7 @@ private:
     Ui::MainWindow *ui;
 
 //File model & tree view of files
-    QDirModel* model;
+    QFileSystemModel* model;
 
 //Graph's members
     QList< GraphItem * > list;

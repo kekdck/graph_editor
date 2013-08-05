@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Setting up model and treeView
-    model = new QDirModel(this);
-    model->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name);
+    model = new QFileSystemModel(this);
+    model->setRootPath("");
     ui->treeView->setModel(model);
 
     QModelIndex index = model->index("/");
@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
+    ui->graphicsView->setRenderHints(QPainter::Antialiasing);
 }
 
 MainWindow::~MainWindow()
@@ -32,41 +33,33 @@ void MainWindow::on_pushAddButton_clicked()
     if(!index.isValid()) return;
 
     GraphItem* item = new GraphItem(10, 10, 20, 20);
-    if (model->isDir(index))
-    {
-        item->setBrush(QBrush(Qt::yellow));
-    }
-    else
-    {
-        item->setBrush(QBrush(Qt::blue));
-    }
     item->setFile(index, model);
     scene->addItem(item);
 
-
-
-
+    //add edge from new item to the last
     if(!list.isEmpty())
     {
-        QPointF source = item->mapToScene(item->boundingRect().center());
-        QPointF dest = list.last()->mapToScene(list.last()->boundingRect().center());
-
-        GraphEdge* edge = new GraphEdge(source.rx(), source.ry(), dest.rx(), dest.ry());
+        GraphEdge* edge = new GraphEdge(list.last(), item);
 
         item->addOutEdge(edge);
         list.last()->addInEdge(edge);
 
         scene->addItem(edge);
+#ifdef QT_DEBUG
+        qDebug() << "Added edge from " << item->fileName() << " to " << list.last()->fileName();
+#endif //QT_DEBUG
     }
 
-
     list.push_back(item);
+    ui->graphicsView->update();
+#ifdef QT_DEBUG
     qDebug() << "Pushed index" <<  item->fileName();
+#endif //QT_DEBUG
 }
 
 void MainWindow::on_pushRemoveButton_clicked()
 {
-    if (list.empty()) return;
+    if (list.isEmpty()) return;
     scene->removeItem(list.last());
     list.pop_back();
 }
