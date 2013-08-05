@@ -40,12 +40,16 @@ QString GraphItem::fileName()
 
 void GraphItem::addOutEdge(GraphEdge * edge)
 {
+    QPointF pos = mapToScene(boundingRect().center());
     outEdges << edge;
+    edge->adjustSource(pos);
 }
 
 void GraphItem::addInEdge(GraphEdge *edge)
 {
+    QPointF pos = mapToScene(boundingRect().center());
     inEdges << edge; 
+    edge->adjustDest(pos);
 }
 
 
