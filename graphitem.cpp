@@ -5,7 +5,9 @@ GraphItem::GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem 
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
-
+    setFlag(ItemSendsGeometryChanges);
+    setCacheMode(DeviceCoordinateCache);
+    setZValue(-1);
 
     brush().setColor(Qt::blue);
     nameText = new QGraphicsTextItem(0, this);
@@ -36,9 +38,49 @@ QString GraphItem::fileName()
     return dirModel->fileInfo(fileIndex).fileName();
 }
 
+void GraphItem::addOutEdge(GraphEdge * edge)
+{
+    outEdges << edge;
+}
+
+void GraphItem::addInEdge(GraphEdge *edge)
+{
+    inEdges << edge; 
+}
+
+
 void GraphItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsRectItem::mouseDoubleClickEvent(event);
     //Here is better to implement scrolling to this->fileIndex in mainwindow->treeView
 
+}
+
+
+QVariant GraphItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+{
+    
+    
+    if (change == ItemPositionHasChanged)
+    {
+        QPointF pos = mapToScene(boundingRect().center());
+        
+        if (!inEdges.isEmpty())
+        {
+            foreach(GraphEdge *edge, inEdges)
+            {
+                edge->adjustDest(pos);
+            }
+        }
+        if (!outEdges.isEmpty())
+        {
+            foreach(GraphEdge *edge, outEdges)
+            {
+                edge->adjustSource(pos);
+            }
+        }
+        
+    }
+    
+    return QGraphicsItem::itemChange(change, value);
 }

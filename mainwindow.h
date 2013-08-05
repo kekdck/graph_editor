@@ -1,6 +1,4 @@
 #ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
@@ -12,6 +10,9 @@
 #include <QDebug>
 
 #include "graphitem.h"
+#include "graphedge.h"
+#define MAINWINDOW_H
+
 
 namespace Ui {
 class MainWindow;

@@ -43,11 +43,25 @@ void MainWindow::on_pushAddButton_clicked()
     item->setFile(index, model);
     scene->addItem(item);
 
-    list.push_back(item);
 
-#ifdef QT_DEBUG
+
+
+    if(!list.isEmpty())
+    {
+        QPointF source = item->mapToScene(item->boundingRect().center());
+        QPointF dest = list.last()->mapToScene(list.last()->boundingRect().center());
+
+        GraphEdge* edge = new GraphEdge(source.rx(), source.ry(), dest.rx(), dest.ry());
+
+        item->addOutEdge(edge);
+        list.last()->addInEdge(edge);
+
+        scene->addItem(edge);
+    }
+
+
+    list.push_back(item);
     qDebug() << "Pushed index" <<  item->fileName();
-#endif //QT_DEBUG
 }
 
 void MainWindow::on_pushRemoveButton_clicked()
