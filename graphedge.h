@@ -15,9 +15,12 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    QRectF boundingRect() const;
+
 private:
     QPointF sourcePoint;
     QPointF destPoint;
+
 
 };
 

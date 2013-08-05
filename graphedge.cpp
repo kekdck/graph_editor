@@ -25,10 +25,23 @@ void GraphEdge::adjustDest(QPointF &dest)
 
 void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+
+
     QLineF line(sourcePoint, destPoint);
 
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(line);
 
 }
+
+QRectF GraphEdge::boundingRect() const
+{
+    qreal penWidth = 1;
+    qreal extra = 1;
+
+    return QRectF(sourcePoint, QSizeF(destPoint.x() - sourcePoint.x(),destPoint.y() - sourcePoint.y()))
+            .normalized()
+            .adjusted(-extra, -extra, extra, extra);
+}
+
 
