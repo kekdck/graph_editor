@@ -28,9 +28,29 @@ void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     painter->setPen(pen());
 #ifdef QT_DEBUG
-    qDebug() << "called paint graphedge from" << src->fileName() << " to " << dest->fileName();
-    qDebug() << "drawing from " << src->boundingRect().center() << " to " << dest->boundingRect().center();
+    qDebug() << "called paint graphedge from"
+             << src->fileName() << "(" << src->boundingRect() << ") to "
+             << dest->fileName() << "(" << src->boundingRect() << ")";
+    qDebug() << "drawing graphedge from "
+             << src->x() << src->y()
+             << " to "
+             << dest->x() << dest->y();
 #endif //QT_DEBUG
-    painter->drawLine(src->x(), src->y(), dest->x(), dest->y());
+    painter->drawLine(src->x()+src->rect().width()/2, src->y()+src->rect().height()/2,
+                      dest->x()+dest->rect().width()/2, dest->y()+src->rect().height()/2);
 }
+
+QRectF GraphEdge::boundingRect() const
+{
+    qreal penWidth = 1;
+    qreal extra = 1;
+
+    qDebug() << QRectF(src->x(), src->y(), dest->x(), dest->y())
+                .normalized()
+                .adjusted(-extra, -extra, extra, extra);
+    return QRectF(src->x(), src->y(), dest->x(), dest->y())
+            .normalized()
+            .adjusted(-extra, -extra, extra, extra);
+}
+
 

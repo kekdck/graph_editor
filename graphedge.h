@@ -14,9 +14,13 @@ public:
     void setDest(GraphItem *dest);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    QRectF boundingRect() const;
+
 private:
     GraphItem *src;
     GraphItem *dest;
+
 };
 
 #endif // GRAPHEDGE_H
