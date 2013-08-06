@@ -76,9 +76,8 @@ void GraphItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 QRectF GraphItem::boundingRect() const
 {
-    qDebug() << rect();
+    //qDebug() << rect();
     return rect();
-
 }
 
 QVariant GraphItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
@@ -87,7 +86,14 @@ QVariant GraphItem::itemChange(QGraphicsItem::GraphicsItemChange change, const Q
     {
     case ItemPositionHasChanged:
         {
-
+            foreach (GraphEdge *edge, inEdges)
+            {
+                edge->update();
+            }
+            foreach (GraphEdge *edge, outEdges)
+            {
+                edge->update();
+            }
         } break;
     case ItemSelectedChange:
         {

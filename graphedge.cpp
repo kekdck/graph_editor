@@ -31,6 +31,6 @@ void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     qDebug() << "called paint graphedge from" << src->fileName() << " to " << dest->fileName();
     qDebug() << "drawing from " << src->boundingRect().center() << " to " << dest->boundingRect().center();
 #endif //QT_DEBUG
-    painter->drawLine(src->boundingRect().center(), dest->boundingRect().center());
+    painter->drawLine(src->x(), src->y(), dest->x(), dest->y());
 }
 
