@@ -37,18 +37,18 @@ void MainWindow::on_pushAddButton_clicked()
     scene->addItem(item);
 
     //add edge from new item to the last
-    if(!list.isEmpty())
-    {
-        GraphEdge* edge = new GraphEdge(list.last(), item);
+//    if(!list.isEmpty())
+//    {
+//        GraphEdge* edge = new GraphEdge(list.last(), item);
 
-        item->addOutEdge(edge);
-        list.last()->addInEdge(edge);
+//        item->addOutEdge(edge);
+//        list.last()->addInEdge(edge);
 
-        scene->addItem(edge);
-#ifdef QT_DEBUG
-        qDebug() << "Added edge from " << item->fileName() << " to " << list.last()->fileName();
-#endif //QT_DEBUG
-    }
+//        scene->addItem(edge);
+//#ifdef QT_DEBUG
+//        qDebug() << "Added edge from " << item->fileName() << " to " << list.last()->fileName();
+//#endif //QT_DEBUG
+//    }
 
     list.push_back(item);
     ui->graphicsView->update();
@@ -62,4 +62,29 @@ void MainWindow::on_pushRemoveButton_clicked()
     if (list.isEmpty()) return;
     scene->removeItem(list.last());
     list.pop_back();
+}
+
+void MainWindow::on_pushConnectButton_clicked()
+{
+    QList<QGraphicsItem* > items =  scene->selectedItems();
+    if (items.length() == 2)
+    {
+        GraphItem* firstItem = dynamic_cast<GraphItem* >(items.first());
+        GraphItem* lastItem  = dynamic_cast<GraphItem* >(items.last());
+
+        if (firstItem && lastItem)
+        {
+            QPointF source = lastItem->mapToScene(lastItem->boundingRect().center());
+            QPointF dest = firstItem->mapToScene(firstItem->boundingRect().center());
+
+            GraphEdge* edge = new GraphEdge(lastItem, firstItem);
+
+            firstItem->addOutEdge(edge);
+            lastItem->addInEdge(edge);
+
+            scene->addItem(edge);
+        }
+    }
+
+    scene->clearSelection();
 }
