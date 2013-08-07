@@ -104,10 +104,10 @@
     <property name="title">
      <string>Меню</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="actionNew"/>
     <addaction name="action_2"/>
     <addaction name="action_3"/>
-    <addaction name="action_4"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -119,7 +119,7 @@
    <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action">
+  <action name="actionNew">
    <property name="text">
     <string>Новый</string>
    </property>
@@ -134,7 +134,7 @@
     <string>Сохранить</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="actionQuit">
    <property name="text">
     <string>Выход</string>
    </property>

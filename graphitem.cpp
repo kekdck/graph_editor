@@ -16,6 +16,20 @@ GraphItem::GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem 
     nameText->setPos(thisPos);
 }
 
+void GraphItem::eraseEdges()
+{
+    foreach(GraphEdge *edge, inEdges)
+    {
+        scene()->removeItem(edge);
+    }
+    inEdges.erase(inEdges.begin(), inEdges.end());
+    foreach(GraphEdge *edge, outEdges)
+    {
+        scene()->removeItem(edge);
+    }
+    outEdges.erase(outEdges.begin(), outEdges.end());
+}
+
 void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     foreach (GraphEdge *edge, inEdges)

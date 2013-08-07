@@ -26,6 +26,8 @@ public:
 
     void addOutEdge(GraphEdge* edge);
     void addInEdge(GraphEdge* edge);
+
+    void eraseEdges();
     
     bool advance();
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);

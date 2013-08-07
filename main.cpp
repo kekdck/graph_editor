@@ -9,6 +9,6 @@ int main(int argc, char *argv[])
 
     QTime time = QTime::currentTime();
     qsrand((uint)time.msec());
-    
+    a.setQuitOnLastWindowClosed(true);
     return a.exec();
 }

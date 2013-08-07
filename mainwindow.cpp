@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
+    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 MainWindow::~MainWindow()
@@ -60,6 +61,28 @@ void MainWindow::on_pushAddButton_clicked()
 void MainWindow::on_pushRemoveButton_clicked()
 {
     if (list.isEmpty()) return;
-    scene->removeItem(list.last());
-    list.pop_back();
+    QList <QGraphicsItem *> items = scene->selectedItems();
+    foreach(QGraphicsItem *item, items)
+    {
+        GraphItem *grit = dynamic_cast<GraphItem *>(item);
+        if (grit)
+        {
+            grit->eraseEdges();
+            scene->removeItem(grit);
+            list.removeOne(grit);
+        }
+    }
+    scene->update();
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+    foreach (GraphItem *item, list)
+    {
+        item->eraseEdges();
+        scene->removeItem(item);
+    }
+    //Removing all thing from list
+    list.erase(list.begin(), list.end());
+    scene->update();
 }
