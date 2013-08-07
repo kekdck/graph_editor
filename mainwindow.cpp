@@ -37,20 +37,6 @@ void MainWindow::on_pushAddButton_clicked()
     item->setFile(index, model);
     scene->addItem(item);
 
-    //add edge from new item to the last
-//    if(!list.isEmpty())
-//    {
-//        GraphEdge* edge = new GraphEdge(list.last(), item);
-
-//        item->addOutEdge(edge);
-//        list.last()->addInEdge(edge);
-
-//        scene->addItem(edge);
-//#ifdef QT_DEBUG
-//        qDebug() << "Added edge from " << item->fileName() << " to " << list.last()->fileName();
-//#endif //QT_DEBUG
-//    }
-
     list.push_back(item);
     ui->graphicsView->update();
 #ifdef QT_DEBUG
@@ -110,4 +96,5 @@ void MainWindow::on_pushConnectButton_clicked()
     }
 
     scene->clearSelection();
+    scene->update();
 }

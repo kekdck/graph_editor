@@ -32,11 +32,9 @@ private slots:
 
     void on_pushAddButton_clicked();
 
-<<<<<<< HEAD
     void on_actionNew_triggered();
-=======
+
     void on_pushConnectButton_clicked();
->>>>>>> a99bc2bb48787abb83ea0886f253e9922e73cc49
 
 private:
     Ui::MainWindow *ui;
