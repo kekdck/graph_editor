@@ -51,8 +51,15 @@ void GraphItem::setFile(QModelIndex index, QFileSystemModel *model)
     {
         setBrush(QBrush(Qt::cyan));
     }
+
     //making view props
-    nameText->setPlainText(model->fileName(fileIndex));
+    QString fn = model->fileName(fileIndex);
+    if (fn.length()>15)
+    {
+        fn.chop(fn.length()-7);
+        fn.append("...");
+    }
+    nameText->setPlainText(fn);
     nameText->setPos(QPointF(boundingRect().width() - nameText->boundingRect().width()/2,-10));
 }
 
