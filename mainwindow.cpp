@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     sizes.push_back(600);
     ui->splitter->setSizes(sizes);
 
-
     scene = new QGraphicsScene(this);
     ui->gridCheckBox->setChecked(true);
     ui->graphicsView->setScene(scene);
@@ -47,6 +46,7 @@ void MainWindow::on_pushAddButton_clicked()
     item->setFile(index, model);
     scene->addItem(item);
 
+    ui->statusBar->showMessage("Added " + item->fileName(), 4000);
     list.push_back(item);
     ui->graphicsView->update();
 #ifdef QT_DEBUG
@@ -69,6 +69,18 @@ void MainWindow::on_pushRemoveButton_clicked()
         }
     }
     scene->update();
+}
+
+void MainWindow::wheelEvent(QWheelEvent *e)
+{
+    if (e->delta()>0)
+    {
+        zoomIn();
+    }
+    else
+    {
+        zoomOut();
+    }
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -109,13 +121,15 @@ void MainWindow::on_pushConnectButton_clicked()
     scene->update();
 }
 
-void MainWindow::on_zoomInButton_clicked()
+void MainWindow::zoomIn()
 {
+    if (ui->graphicsView->matrix().m11() > 4) return;
     ui->graphicsView->scale(1.2, 1.2);
 }
 
-void MainWindow::on_zoomOutButton_clicked()
+void MainWindow::zoomOut()
 {
+    if (ui->graphicsView->matrix().m11() < 0.4) return;
     ui->graphicsView->scale(1/1.2, 1/1.2);
 }
 

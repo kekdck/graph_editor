@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    virtual void wheelEvent( QWheelEvent * e );
     ~MainWindow();
 
 private slots:
@@ -36,12 +37,11 @@ private slots:
 
     void on_pushConnectButton_clicked();
 
-    void on_zoomInButton_clicked();
-
-    void on_zoomOutButton_clicked();
-
     void on_gridCheckBox_stateChanged(int arg1);
 
+    void zoomIn();
+
+    void zoomOut();
 private:
     Ui::MainWindow *ui;
 
