@@ -32,15 +32,15 @@ void GraphItem::eraseEdges()
 
 void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    foreach (GraphEdge *edge, inEdges)
-    {
-        edge->paint(painter, option, widget);
-    }
-    foreach (GraphEdge *edge, outEdges)
-    {
-        edge->paint(painter, option, widget);
-    }
-    prepareGeometryChange();
+//    foreach (GraphEdge *edge, inEdges)
+//    {
+//        edge->paint(painter, option, widget);
+//    }
+//    foreach (GraphEdge *edge, outEdges)
+//    {
+//        edge->paint(painter, option, widget);
+//    }
+    //prepareGeometryChange();
     painter->setBrush(brush());
     painter->setPen(pen());
     painter->drawRect(rect());
@@ -67,7 +67,7 @@ void GraphItem::setFile(QModelIndex index, QFileSystemModel *model)
 
 QString GraphItem::fileName()
 {
-    return fileModel->fileInfo(fileIndex).fileName();
+    return fileModel->fileName(fileIndex);
 }
 
 void GraphItem::addOutEdge(GraphEdge * edge)
@@ -95,24 +95,35 @@ QRectF GraphItem::boundingRect() const
     return rect();
 }
 
+QDebug operator<< (QDebug d, GraphItem &item)
+{
+    d << item.fileName() << "(" << item.x() << ";" << item.y() << ")"
+      << "connections: " << item.inEdges.count()+item.outEdges.count();
+    return d;
+}
+
+
 QVariant GraphItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
     switch (change)
     {
     case ItemPositionHasChanged:
         {
-            foreach (GraphEdge *edge, inEdges)
-            {
-                edge->update();
-            }
-            foreach (GraphEdge *edge, outEdges)
-            {
-                edge->update();
-            }
+//            foreach (GraphEdge *edge, inEdges)
+//            {
+//                edge->update();
+//            }
+//            foreach (GraphEdge *edge, outEdges)
+//            {
+//                edge->update();
+//            }
             scene()->update();
         } break;
     case ItemSelectedChange:
         {
+#ifdef QT_DEBUG
+        qDebug() << "changed selection of " << *this;
+#endif //QT_DEBUG
             if (value == true)
             {
                 QBrush br = brush();
@@ -129,6 +140,7 @@ QVariant GraphItem::itemChange(QGraphicsItem::GraphicsItemChange change, const Q
                 br.setColor(col);
                 setBrush(br);
             }
+            scene()->update();
         } break;
     default:
         {

@@ -35,6 +35,8 @@ public:
     //Selection events
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     QRectF boundingRect() const;
+
+    friend QDebug operator<< (QDebug d, GraphItem &item);
 protected:
 
 private:

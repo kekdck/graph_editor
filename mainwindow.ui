@@ -93,6 +93,9 @@
        <property name="dragMode">
         <enum>QGraphicsView::RubberBandDrag</enum>
        </property>
+       <property name="viewportUpdateMode">
+        <enum>QGraphicsView::SmartViewportUpdate</enum>
+       </property>
       </widget>
      </widget>
     </item>
@@ -104,7 +107,7 @@
      <x>0</x>
      <y>0</y>
      <width>740</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

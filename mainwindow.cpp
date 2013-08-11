@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView->setCurrentIndex(index);
     ui->treeView->resizeColumnToContents(1);
 
-    scene = new QGraphicsScene();
+    scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
@@ -92,6 +92,9 @@ void MainWindow::on_pushConnectButton_clicked()
             lastItem->addInEdge(edge);
 
             scene->addItem(edge);
+#ifdef QT_DEBUG
+    qDebug() << "created" << *edge;
+#endif //QT_DEBUG
         }
     }
 

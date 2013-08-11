@@ -8,7 +8,8 @@ GraphEdge::GraphEdge(GraphItem *source, GraphItem *destin, QGraphicsItem *parent
     src = source;
     dest = destin;
     setAcceptedMouseButtons(0);
-    setPen(QPen(Qt::black));
+    setPen(QPen(QBrush(Qt::black), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    setZValue(1);
 }
 
 void GraphEdge::setSource(GraphItem *source)
@@ -26,31 +27,31 @@ void GraphEdge::setDest(GraphItem *destin)
 
 void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    //prepareGeometryChange();
     painter->setPen(pen());
+    QPoint begin(src->x()+src->rect().width()/2,
+                 src->y()+src->rect().height()/2),
+            end(dest->x()+dest->rect().width()/2,
+                dest->y()+src->rect().height()/2);
 #ifdef QT_DEBUG
-    qDebug() << "called paint graphedge from"
-             << src->fileName() << "(" << src->boundingRect() << ") to "
-             << dest->fileName() << "(" << src->boundingRect() << ")";
-    qDebug() << "drawing graphedge from "
-             << src->x() << src->y()
-             << " to "
-             << dest->x() << dest->y();
+//    qDebug() << "called paint graphedge from" << *src << " to " << *dest;
+//    qDebug() << "drawing graphedge from " << begin << " to " << end;
 #endif //QT_DEBUG
-    painter->drawLine(src->x()+src->rect().width()/2, src->y()+src->rect().height()/2,
-                      dest->x()+dest->rect().width()/2, dest->y()+src->rect().height()/2);
+    painter->drawLine(begin, end);
 }
 
 QRectF GraphEdge::boundingRect() const
 {
-    qreal penWidth = 1;
     qreal extra = 1;
 
-    qDebug() << QRectF(src->x(), src->y(), dest->x(), dest->y())
-                .normalized()
-                .adjusted(-extra, -extra, extra, extra);
     return QRectF(src->x(), src->y(), dest->x(), dest->y())
             .normalized()
-            .adjusted(-extra, -extra, extra, extra);
+            .adjusted(-extra, extra, extra, -extra);
 }
 
 
+QDebug operator<< (QDebug d, GraphEdge &edge)
+{
+    d << "Edge(" << *edge.src << ";" << *edge.dest << ")";
+    return d;
+}

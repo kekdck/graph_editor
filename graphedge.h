@@ -17,6 +17,7 @@ public:
 
     QRectF boundingRect() const;
 
+    friend QDebug operator<< (QDebug d, GraphEdge &edge);
 private:
     GraphItem *src;
     GraphItem *dest;
