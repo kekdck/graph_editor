@@ -23,3 +23,6 @@ HEADERS  += mainwindow.h \
     graphedge.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    icons.qrc

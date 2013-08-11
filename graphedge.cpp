@@ -28,10 +28,10 @@ void GraphEdge::setDest(GraphItem *destin)
 void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setPen(pen());
-    QPoint begin(src->x()+src->rect().width()/2,
-                 src->y()+src->rect().height()/2),
-            end(dest->x()+dest->rect().width()/2,
-                dest->y()+src->rect().height()/2);
+    QPoint begin(src->x()+src->rect().width(),
+                 src->y()+src->rect().height()),
+            end(dest->x()+dest->rect().width(),
+                dest->y()+src->rect().height());
 #ifdef QT_DEBUG
 //    qDebug() << "called paint graphedge from" << *src << " to " << *dest;
 //    qDebug() << "drawing graphedge from " << begin << " to " << end;

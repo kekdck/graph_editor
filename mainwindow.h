@@ -36,6 +36,12 @@ private slots:
 
     void on_pushConnectButton_clicked();
 
+    void on_zoomInButton_clicked();
+
+    void on_zoomOutButton_clicked();
+
+    void on_gridCheckBox_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 

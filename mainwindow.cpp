@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     scene = new QGraphicsScene(this);
-    scene->setBackgroundBrush(QBrush(QColor(180,180,180), Qt::CrossPattern));
+    ui->gridCheckBox->setChecked(true);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
@@ -106,5 +106,28 @@ void MainWindow::on_pushConnectButton_clicked()
     }
 
     scene->clearSelection();
+    scene->update();
+}
+
+void MainWindow::on_zoomInButton_clicked()
+{
+    ui->graphicsView->scale(1.2, 1.2);
+}
+
+void MainWindow::on_zoomOutButton_clicked()
+{
+    ui->graphicsView->scale(1/1.2, 1/1.2);
+}
+
+void MainWindow::on_gridCheckBox_stateChanged(int arg1)
+{
+    if (arg1)
+    {
+        scene->setBackgroundBrush(QBrush(QColor(150,150,150), Qt::CrossPattern));
+    }
+    else
+    {
+        scene->setBackgroundBrush(QBrush(QColor(255,255,255)));
+    }
     scene->update();
 }
