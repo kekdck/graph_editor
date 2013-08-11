@@ -32,15 +32,6 @@ void GraphItem::eraseEdges()
 
 void GraphItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-//    foreach (GraphEdge *edge, inEdges)
-//    {
-//        edge->paint(painter, option, widget);
-//    }
-//    foreach (GraphEdge *edge, outEdges)
-//    {
-//        edge->paint(painter, option, widget);
-//    }
-    //prepareGeometryChange();
     painter->setBrush(brush());
     painter->setPen(pen());
     painter->drawRect(rect());
@@ -109,14 +100,6 @@ QVariant GraphItem::itemChange(QGraphicsItem::GraphicsItemChange change, const Q
     {
     case ItemPositionHasChanged:
         {
-//            foreach (GraphEdge *edge, inEdges)
-//            {
-//                edge->update();
-//            }
-//            foreach (GraphEdge *edge, outEdges)
-//            {
-//                edge->update();
-//            }
             scene()->update();
         } break;
     case ItemSelectedChange:

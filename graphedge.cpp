@@ -27,7 +27,6 @@ void GraphEdge::setDest(GraphItem *destin)
 
 void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //prepareGeometryChange();
     painter->setPen(pen());
     QPoint begin(src->x()+src->rect().width()/2,
                  src->y()+src->rect().height()/2),

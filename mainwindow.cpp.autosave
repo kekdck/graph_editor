@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     scene = new QGraphicsScene(this);
-    scene->setBackgroundBrush(QBrush(QColor(180,180,180), Qt::CrossPattern));
+    scene->setBackgroundBrush(QBrush(QColor(150,150,150), Qt::CrossPattern));
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
