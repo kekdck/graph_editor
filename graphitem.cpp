@@ -56,10 +56,10 @@ void GraphItem::setFile(QModelIndex index, QFileSystemModel *model)
     QString fn = model->fileName(fileIndex);
     if (fn.length()>15)
     {
-        fn.chop(fn.length()-7);
+        fn.chop(fn.length()-12);
         fn.append("...");
     }
-    nameText->setPlainText(fn);
+    nameText->setHtml("<div style='background-color:#FFFFFF; border: solid 3px #000000; padding: 5px 5px 5px 5px; '>" + fn + "</div>");
     nameText->setPos(QPointF(boundingRect().width() - nameText->boundingRect().width()/2,-10));
 }
 
