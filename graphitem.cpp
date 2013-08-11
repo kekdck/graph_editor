@@ -14,6 +14,14 @@ GraphItem::GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem 
     nameText = new QGraphicsTextItem("New item", this);
     QPointF thisPos(boundingRect().width()/2,-10);
     nameText->setPos(thisPos);
+    propModel = new QStandardItemModel(10, 2, parentObject());
+    QStandardItem *item = new QStandardItem();
+    propModel->setItem(0, item);
+}
+
+QStandardItemModel* GraphItem::model()
+{
+    return propModel;
 }
 
 void GraphItem::eraseEdges()
@@ -59,6 +67,8 @@ void GraphItem::setFile(QModelIndex index, QFileSystemModel *model)
         fn.chop(fn.length()-12);
         fn.append("...");
     }
+    propModel->setItem(1, new QStandardItem(fileModel->fileName(fileIndex)));
+    propModel->setItem(2, new QStandardItem(fileModel->filePath(fileIndex)));
     nameText->setHtml("<div style='background-color:#FFFFFF; border: solid 3px #000000; padding: 5px 5px 5px 5px; '>" + fn + "</div>");
     nameText->setPos(QPointF(boundingRect().width() - nameText->boundingRect().width()/2,-10));
 }

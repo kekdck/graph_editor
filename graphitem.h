@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include <QFile>
 #include <QTreeView>
+#include <QStandardItemModel>
 #include <QFileSystemModel>
 #include <QMessageBox>
 #include <QDebug>
@@ -28,18 +29,20 @@ public:
     void addInEdge(GraphEdge* edge);
 
     void eraseEdges();
-    
-    bool advance();
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+    QStandardItemModel* model();
 
     //Selection events
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     QRectF boundingRect() const;
+
 
     friend QDebug operator<< (QDebug d, GraphItem &item);
 protected:
 
 private:
+    QStandardItemModel *propModel;
     QGraphicsTextItem *nameText;
 
     QModelIndex fileIndex;

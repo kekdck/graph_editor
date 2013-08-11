@@ -29,11 +29,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(scene, SIGNAL(selectionChanged()), this, SLOT(refreshItemProps()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *)
+{
+    refreshItemProps();
 }
 
 void MainWindow::on_pushAddButton_clicked()
@@ -144,4 +150,15 @@ void MainWindow::on_gridCheckBox_stateChanged(int arg1)
         scene->setBackgroundBrush(QBrush(QColor(255,255,255)));
     }
     scene->update();
+}
+
+void MainWindow::refreshItemProps()
+{
+    qDebug() << "Called refresh";
+    QList <QGraphicsItem *> selection = scene->selectedItems();
+    if (selection.count() != 1) return;
+
+    GraphItem *item = dynamic_cast<GraphItem *>(selection.first());
+    curItemPropModel = item->model();
+    ui->propTreeView->setModel(curItemPropModel);
 }

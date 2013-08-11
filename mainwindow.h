@@ -24,6 +24,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    virtual void mousePressEvent(QMouseEvent *);
     explicit MainWindow(QWidget *parent = 0);
     virtual void wheelEvent( QWheelEvent * e );
     ~MainWindow();
@@ -42,12 +43,15 @@ private slots:
     void zoomIn();
 
     void zoomOut();
+
+    void refreshItemProps();
 private:
     Ui::MainWindow *ui;
 
 //File model & tree view of files
     QFileSystemModel* model;
 
+    QStandardItemModel *curItemPropModel;
 //Graph's members
     QList< GraphItem * > list;
     QGraphicsScene *scene;
