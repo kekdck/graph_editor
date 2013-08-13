@@ -74,6 +74,11 @@ void MainWindow::on_pushRemoveButton_clicked()
             list.removeOne(grit);
         }
     }
+
+    scene->clearSelection();
+
+    refreshItemProps();
+
     scene->update();
 }
 
@@ -191,6 +196,11 @@ void MainWindow::on_gridCheckBox_stateChanged(int arg1)
 void MainWindow::refreshItemProps()
 {
     QList <QGraphicsItem *> selection = scene->selectedItems();
+    if (selection.count() == 0)
+    {
+        ui->propTreeView->setModel(0);
+        return;
+    }
     if (selection.count() != 1) return;
 
     GraphItem *item = dynamic_cast<GraphItem *>(selection.first());

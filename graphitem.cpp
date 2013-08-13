@@ -67,6 +67,9 @@ void GraphItem::setFile(QModelIndex index, QFileSystemModel *model)
         fn.chop(fn.length()-12);
         fn.append("...");
     }
+    QStringList head;
+    head << "Property" << "Value";
+    propModel->setHorizontalHeaderLabels(head);
     propModel->setItem(0, 0, new QStandardItem("isDir?"));
     propModel->setItem(1, 0, new QStandardItem("Name"));
     propModel->setItem(2, 0, new QStandardItem("Path"));
