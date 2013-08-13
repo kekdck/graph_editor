@@ -15,6 +15,9 @@ GraphComment::GraphComment(const QString& text, QGraphicsItem* parent):
     setPos(parentPos);
 
     blob = new QGraphicsRectItem(boundingRect(), this);
+
+    blob->setFlag(QGraphicsItem::ItemIsMovable);
+    blob->setZValue(-1);
 }
 
 //QVariant GraphComment::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
