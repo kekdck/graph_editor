@@ -67,10 +67,19 @@ void GraphItem::setFile(QModelIndex index, QFileSystemModel *model)
         fn.chop(fn.length()-12);
         fn.append("...");
     }
-    propModel->setItem(1, new QStandardItem(fileModel->fileName(fileIndex)));
-    propModel->setItem(2, new QStandardItem(fileModel->filePath(fileIndex)));
+    propModel->setItem(0, 0, new QStandardItem("isDir?"));
+    propModel->setItem(1, 0, new QStandardItem("Name"));
+    propModel->setItem(2, 0, new QStandardItem("Path"));
+    propModel->setItem(0, 1, new QStandardItem(fileModel->fileInfo(fileIndex).isDir() ? "Directory" : "File"));
+    propModel->setItem(1, 1, new QStandardItem(fileModel->fileName(fileIndex)));
+    propModel->setItem(2, 1, new QStandardItem(fileModel->filePath(fileIndex)));
     nameText->setHtml("<div style='background-color:#FFFFFF; border: solid 3px #000000; padding: 5px 5px 5px 5px; '>" + fn + "</div>");
     nameText->setPos(QPointF(boundingRect().width() - nameText->boundingRect().width()/2,-10));
+}
+
+QModelIndex GraphItem::index()
+{
+    return fileIndex;
 }
 
 QString GraphItem::fileName()

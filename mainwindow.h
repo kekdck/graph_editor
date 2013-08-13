@@ -24,8 +24,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    virtual void mousePressEvent(QMouseEvent *);
     explicit MainWindow(QWidget *parent = 0);
+    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyReleaseEvent(QKeyEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void wheelEvent( QWheelEvent * e );
     ~MainWindow();
 
@@ -45,6 +47,7 @@ private slots:
     void zoomOut();
 
     void refreshItemProps();
+
 private:
     Ui::MainWindow *ui;
 

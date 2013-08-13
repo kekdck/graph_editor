@@ -30,7 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(scene, SIGNAL(selectionChanged()), this, SLOT(refreshItemProps()));
-
 }
 
 MainWindow::~MainWindow()
@@ -89,6 +88,38 @@ void MainWindow::wheelEvent(QWheelEvent *e)
         zoomOut();
     }
     return;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Shift:
+        {
+            ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+        }break;
+    default:
+        {
+            //some default action?
+        }break;
+    }
+    QMainWindow::keyPressEvent(e);
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Shift:
+        {
+            ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+        }break;
+    default:
+        {
+
+        }break;
+    }
+    QMainWindow::keyReleaseEvent(e);
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -162,4 +193,7 @@ void MainWindow::refreshItemProps()
     GraphItem *item = dynamic_cast<GraphItem *>(selection.first());
     curItemPropModel = item->model();
     ui->propTreeView->setModel(curItemPropModel);
+
+    ui->treeView->scrollTo(item->index());
+    ui->treeView->setCurrentIndex(item->index());
 }

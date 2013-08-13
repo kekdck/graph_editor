@@ -24,6 +24,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void setFile(QModelIndex index, QFileSystemModel *model);
     QString fileName();
+    QModelIndex index();
 
     void addOutEdge(GraphEdge* edge);
     void addInEdge(GraphEdge* edge);
