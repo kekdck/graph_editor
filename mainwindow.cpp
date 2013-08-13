@@ -24,12 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     sizes.push_back(600);
     ui->splitter->setSizes(sizes);
 
-    scene = new QGraphicsScene(this);
+    scene = new QGraphicsScene(-1000, -1000, 2000, 2000, this);
     ui->gridCheckBox->setChecked(true);
     ui->graphicsView->setScene(scene);
-    ui->graphicsView->setRenderHints(QPainter::Antialiasing);
+    ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(scene, SIGNAL(selectionChanged()), this, SLOT(refreshItemProps()));
+
 }
 
 MainWindow::~MainWindow()
@@ -87,6 +88,7 @@ void MainWindow::wheelEvent(QWheelEvent *e)
     {
         zoomOut();
     }
+    return;
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -154,7 +156,6 @@ void MainWindow::on_gridCheckBox_stateChanged(int arg1)
 
 void MainWindow::refreshItemProps()
 {
-    qDebug() << "Called refresh";
     QList <QGraphicsItem *> selection = scene->selectedItems();
     if (selection.count() != 1) return;
 
