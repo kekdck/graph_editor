@@ -150,11 +150,14 @@ void MainWindow::on_pushConnectButton_clicked()
             lastItem->addInEdge(edge);
 
             scene->addItem(edge);
+
 #ifdef QT_DEBUG
     qDebug() << "created" << *edge;
 #endif //QT_DEBUG
         }
     }
+
+
 
     scene->clearSelection();
     scene->update();
@@ -196,4 +199,16 @@ void MainWindow::refreshItemProps()
 
     ui->treeView->scrollTo(item->index());
     ui->treeView->setCurrentIndex(item->index());
+
+
+}
+
+void MainWindow::on_pushCommentButton_clicked()
+{
+    QList<QGraphicsItem* > items =  scene->selectedItems();
+
+    if(items.length() == 1)
+    {
+        GraphComment* comment = new GraphComment("default", items.first());
+    }
 }

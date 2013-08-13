@@ -179,7 +179,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -192,6 +192,17 @@
          </property>
         </spacer>
        </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="pushCommentButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="icons.qrc">
+           <normaloff>:/icons/cloud.png</normaloff>:/icons/cloud.png</iconset>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -203,7 +214,7 @@
      <x>0</x>
      <y>0</y>
      <width>740</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

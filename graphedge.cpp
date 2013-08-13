@@ -9,7 +9,6 @@ GraphEdge::GraphEdge(GraphItem *source, GraphItem *destin, QGraphicsItem *parent
     dest = destin;
     setAcceptedMouseButtons(0);
     setPen(QPen(QBrush(Qt::black), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    setZValue(1);
 }
 
 void GraphEdge::setSource(GraphItem *source)
@@ -32,9 +31,10 @@ void GraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                  src->y()+src->rect().height()),
             end(dest->x()+dest->rect().width(),
                 dest->y()+src->rect().height());
+
 #ifdef QT_DEBUG
-//    qDebug() << "called paint graphedge from" << *src << " to " << *dest;
-//    qDebug() << "drawing graphedge from " << begin << " to " << end;
+    qDebug() << "called paint graphedge from" << *src << " to " << *dest;
+    qDebug() << "drawing graphedge from " << begin << " to " << end;
 #endif //QT_DEBUG
     painter->drawLine(begin, end);
 }

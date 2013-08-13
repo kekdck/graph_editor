@@ -8,7 +8,7 @@ GraphItem::GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem 
              | QGraphicsItem::ItemIsSelectable
              | ItemSendsGeometryChanges);
     setCacheMode(DeviceCoordinateCache);
-    setZValue(-1);
+    setZValue(1);
 
     brush().setColor(Qt::red);
     nameText = new QGraphicsTextItem("New item", this);

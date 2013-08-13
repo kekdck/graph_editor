@@ -13,6 +13,7 @@
 
 #include "graphitem.h"
 #include "graphedge.h"
+#include "graphcomment.h"
 
 
 namespace Ui {
@@ -47,6 +48,8 @@ private slots:
     void zoomOut();
 
     void refreshItemProps();
+
+    void on_pushCommentButton_clicked();
 
 private:
     Ui::MainWindow *ui;
