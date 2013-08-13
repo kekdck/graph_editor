@@ -135,6 +135,9 @@
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
           <widget class="QPushButton" name="zoomInButton">
+           <property name="whatsThis">
+            <string comment="Scales the view in">Zoom in</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -144,12 +147,15 @@
             </iconset>
            </property>
            <property name="shortcut">
-            <string comment="Zoom in" extracomment="Scales the view in"/>
+            <string>+</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
           <widget class="QPushButton" name="zoomOutButton">
+           <property name="whatsThis">
+            <string comment="Scales the view out">Zoom out</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -159,7 +165,7 @@
             </iconset>
            </property>
            <property name="shortcut">
-            <string comment="Zoom out" extracomment="Scales the view out"/>
+            <string>-</string>
            </property>
           </widget>
          </item>
