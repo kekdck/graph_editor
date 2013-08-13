@@ -19,11 +19,11 @@ GraphComment::GraphComment(const QString& text, QGraphicsItem* parent):
 
 }
 
-//QVariant GraphComment::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
-//{
-//    QVariant textChange = QGraphicsTextItem::itemChange(change, value);
-//    return textChange;
-//}
+QVariant GraphComment::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+{
+    QVariant textChange = QGraphicsTextItem::itemChange(change, value);
+    return textChange;
+}
 
 
 
