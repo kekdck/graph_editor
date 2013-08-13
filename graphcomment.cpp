@@ -5,11 +5,10 @@ GraphComment::GraphComment(const QString& text, QGraphicsItem* parent):
     QGraphicsTextItem(text, parent)
 {
     setFlags(QGraphicsItem::ItemIsMovable
-             | QGraphicsItem::ItemIsSelectable
              | ItemSendsGeometryChanges);
 
     setTextInteractionFlags(Qt::TextEditorInteraction);
-
+    setZValue(1);
 
     QPointF parentPos(parent->boundingRect().width()*2,0);
     setPos(parentPos);
@@ -17,7 +16,7 @@ GraphComment::GraphComment(const QString& text, QGraphicsItem* parent):
     blob = new QGraphicsRectItem(boundingRect(), this);
 
     blob->setFlag(QGraphicsItem::ItemIsMovable);
-    blob->setZValue(-1);
+
 }
 
 //QVariant GraphComment::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
