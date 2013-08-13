@@ -18,6 +18,9 @@ public:
     QRectF boundingRect() const;
 
     friend QDebug operator<< (QDebug d, GraphEdge &edge);
+
+    enum { Type = UserType + 2 };
+
 private:
     GraphItem *src;
     GraphItem *dest;

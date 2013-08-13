@@ -17,6 +17,8 @@ GraphItem::GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem 
     propModel = new QStandardItemModel(10, 2, parentObject());
     QStandardItem *item = new QStandardItem();
     propModel->setItem(0, item);
+
+    enum { Type = UserType + 1 };
 }
 
 QStandardItemModel* GraphItem::model()

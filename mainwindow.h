@@ -10,6 +10,7 @@
 #include <QTreeView>
 #include <QDirModel>
 #include <QDebug>
+#include <QGraphicsItem>
 
 #include "graphitem.h"
 #include "graphedge.h"

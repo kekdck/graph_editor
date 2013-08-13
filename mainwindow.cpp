@@ -66,7 +66,7 @@ void MainWindow::on_pushRemoveButton_clicked()
     QList <QGraphicsItem *> items = scene->selectedItems();
     foreach(QGraphicsItem *item, items)
     {
-        GraphItem *grit = dynamic_cast<GraphItem *>(item);
+        GraphItem *grit = qgraphicsitem_cast<GraphItem *>(item);
         if (grit)
         {
             grit->eraseEdges();
@@ -144,8 +144,8 @@ void MainWindow::on_pushConnectButton_clicked()
     QList<QGraphicsItem* > items =  scene->selectedItems();
     if (items.length() == 2)
     {
-        GraphItem* firstItem = dynamic_cast<GraphItem* >(items.first());
-        GraphItem* lastItem  = dynamic_cast<GraphItem* >(items.last());
+        GraphItem* firstItem = qgraphicsitem_cast<GraphItem* >(items.first());
+        GraphItem* lastItem  = qgraphicsitem_cast<GraphItem* >(items.last());
 
         if (firstItem && lastItem)
         {

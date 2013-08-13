@@ -13,6 +13,9 @@ public:
     GraphComment(const QString& text, QGraphicsItem* parent);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    enum { Type = UserType + 3 };
+
+
 private:
 
 };
