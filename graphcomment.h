@@ -3,13 +3,14 @@
 
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
+#include <QPainter>
 
 class GraphComment : public QGraphicsTextItem
 {
 public:
     GraphComment(const QString& text, QGraphicsItem* parent);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
     QGraphicsRectItem* blob;
 };

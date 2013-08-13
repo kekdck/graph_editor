@@ -13,17 +13,15 @@ GraphComment::GraphComment(const QString& text, QGraphicsItem* parent):
     QPointF parentPos(parent->boundingRect().width()*2,0);
     setPos(parentPos);
 
-    blob = new QGraphicsRectItem(boundingRect(), this);
-
-    blob->setFlag(QGraphicsItem::ItemIsMovable);
-
+//    blob = new QGraphicsRectItem(boundingRect(), this);
 }
 
-QVariant GraphComment::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+void GraphComment::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QVariant textChange = QGraphicsTextItem::itemChange(change, value);
-    return textChange;
+    QGraphicsTextItem::paint(painter, option, widget);
+    painter->drawRect(boundingRect());
 }
+
 
 
 
