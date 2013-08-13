@@ -8,6 +8,8 @@ class GraphComment : public QGraphicsTextItem
 {
 public:
     GraphComment(const QString& text, QGraphicsItem* parent);
+
+//    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
     QGraphicsRectItem* blob;
 };

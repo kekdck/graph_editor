@@ -205,7 +205,7 @@
          </property>
          <property name="icon">
           <iconset resource="icons.qrc">
-           <normaloff>:/icons/cloud.png</normaloff>:/icons/cloud.png</iconset>
+           <normaloff>:/icons/icons/cloud.png</normaloff>:/icons/icons/cloud.png</iconset>
          </property>
         </widget>
        </item>

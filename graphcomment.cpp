@@ -7,14 +7,22 @@ GraphComment::GraphComment(const QString& text, QGraphicsItem* parent):
     setFlags(QGraphicsItem::ItemIsMovable
              | QGraphicsItem::ItemIsSelectable
              | ItemSendsGeometryChanges);
-    setCacheMode(DeviceCoordinateCache);
+
+    setTextInteractionFlags(Qt::TextEditorInteraction);
+
 
     QPointF parentPos(parent->boundingRect().width()*2,0);
     setPos(parentPos);
 
-    blob = new QGraphicsRectItem(boundingRect().topLeft().x(), boundingRect().topLeft().y(),
-                                 boundingRect().bottomRight().x(), boundingRect().bottomRight().y(), this);
+    blob = new QGraphicsRectItem(boundingRect(), this);
 }
+
+//QVariant GraphComment::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+//{
+//    QVariant textChange = QGraphicsTextItem::itemChange(change, value);
+//    return textChange;
+//}
+
 
 
 
