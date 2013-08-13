@@ -151,6 +151,8 @@ void MainWindow::on_pushConnectButton_clicked()
         {
             GraphEdge* edge = new GraphEdge(lastItem, firstItem);
 
+            edge->setFlags(QGraphicsItem::ItemIsSelectable
+                           | QGraphicsItem::ItemSendsGeometryChanges);
             firstItem->addOutEdge(edge);
             lastItem->addInEdge(edge);
 
@@ -203,7 +205,8 @@ void MainWindow::refreshItemProps()
     }
     if (selection.count() != 1) return;
 
-    GraphItem *item = dynamic_cast<GraphItem *>(selection.first());
+    GraphItem *item = static_cast<GraphItem *>(selection.first());
+    if (!item) return;
     curItemPropModel = item->model();
     ui->propTreeView->setModel(curItemPropModel);
 
@@ -217,7 +220,7 @@ void MainWindow::on_pushCommentButton_clicked()
 {
     QList<QGraphicsItem* > items =  scene->selectedItems();
 
-    if(items.length() == 1)
+    if(items.length() == 1 && items.first()->childItems().count() < 2)
     {
         GraphComment* comment = new GraphComment("default", items.first());
     }
