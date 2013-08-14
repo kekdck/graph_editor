@@ -205,7 +205,7 @@ void MainWindow::refreshItemProps()
     }
     if (selection.count() != 1) return;
 
-    GraphItem *item = static_cast<GraphItem *>(selection.first());
+    GraphItem *item = qgraphicsitem_cast<GraphItem* >(selection.first());
     if (!item) return;
     curItemPropModel = item->model();
     ui->propTreeView->setModel(curItemPropModel);

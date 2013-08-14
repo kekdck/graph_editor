@@ -11,10 +11,7 @@ GraphComment::GraphComment(const QString& text, QGraphicsItem* parent):
 
     QPointF parentPos(parent->boundingRect().width()*2,parent->boundingRect().height());
     setPos(parentPos);
-
-
 }
-
 
 
 void GraphComment::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
