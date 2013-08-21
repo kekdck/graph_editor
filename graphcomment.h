@@ -8,13 +8,13 @@
 
 class GraphComment : public QGraphicsTextItem
 {
-    Q_OBJECT
 public:
+    enum { Type = UserType + 3 };
     GraphComment(const QString& text, QGraphicsItem* parent);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QRectF boundingRect() const;
 
-    enum { Type = UserType + 3 };
-
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 private:
 

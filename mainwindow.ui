@@ -228,17 +228,27 @@
      <string>Меню</string>
     </property>
     <addaction name="actionNew"/>
-    <addaction name="action_2"/>
-    <addaction name="action_3"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>Справка</string>
     </property>
-    <addaction name="action_5"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>Правка</string>
+    </property>
+    <addaction name="actionClear"/>
+    <addaction name="separator"/>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
    </widget>
    <addaction name="menu"/>
+   <addaction name="menu_3"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -257,7 +267,7 @@
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="actionOpen">
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/icons/Folder-icon.png</normaloff>:/icons/icons/Folder-icon.png</iconset>
@@ -266,7 +276,7 @@
     <string>Открыть</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="actionSave">
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/icons/Floppy-Small-icon.png</normaloff>:/icons/icons/Floppy-Small-icon.png</iconset>
@@ -283,9 +293,41 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action_5">
+  <action name="actionAbout">
    <property name="text">
     <string>О программе</string>
+   </property>
+  </action>
+  <action name="actionClear">
+   <property name="text">
+    <string>Очистить</string>
+   </property>
+   <property name="toolTip">
+    <string>Очищает рабочую область от всех элементов</string>
+   </property>
+  </action>
+  <action name="actionZoomIn">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/zoom-in-icon.png</normaloff>:/icons/icons/zoom-in-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Увеличить</string>
+   </property>
+   <property name="toolTip">
+    <string>Увеличивает вид на 20%</string>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/zoom-out-icon.png</normaloff>:/icons/icons/zoom-out-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Уменьшить</string>
+   </property>
+   <property name="toolTip">
+    <string>Уменьшает вид на 20%</string>
    </property>
   </action>
  </widget>
@@ -300,40 +342,7 @@
  <resources>
   <include location="icons.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>zoomInButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>zoomIn()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>667</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>594</x>
-     <y>26</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zoomOutButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>zoomOut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>703</x>
-     <y>53</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>677</x>
-     <y>25</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>zoomIn()</slot>
   <slot>zoomOut()</slot>

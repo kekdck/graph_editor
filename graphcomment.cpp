@@ -21,8 +21,13 @@ void GraphComment::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 }
 
+QRectF GraphComment::boundingRect() const
+{
+    return QGraphicsTextItem::boundingRect().adjusted(-1, -1, 1, 1);
+}
 
+void GraphComment::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
 
-
-
+}
 

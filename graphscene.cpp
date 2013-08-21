@@ -10,17 +10,27 @@ GraphScene::GraphScene(qreal x, qreal y, qreal width, qreal height, QObject *par
 {
 }
 
+QFileSystemModel *GraphScene::getFileModel() const
+{
+    return fileModel;
+}
+
+void GraphScene::setFileModel(QFileSystemModel *value)
+{
+    fileModel = value;
+}
 
 void GraphScene::addNode(QFileInfo _fileinfo)
 {
     GraphNode* node = new GraphNode(_fileinfo);
 
+    node->setBrush(QBrush( (_fileinfo.isDir()) ? Qt::green : Qt::yellow));
     addItem(node);
 }
 
 void GraphScene::addEdge(GraphNode *source, GraphNode *destin)
 {
-    GraphEdge* edge = new GraphEdge(source, destin);
+    GraphEdge *edge = new GraphEdge(source, destin);
 
     addItem(edge);
 }

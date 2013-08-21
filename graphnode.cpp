@@ -10,47 +10,29 @@ GraphNode::GraphNode(QFileInfo _fileInfo, qreal x, qreal y):
     setCacheMode(DeviceCoordinateCache);
     setZValue(1);
 
-    brush().setColor(Qt::red);
-
-    propModel = new QStandardItemModel(10, 2, parentObject());
+    propModel = new QStandardItemModel(10, 2);
     QStandardItem *item = new QStandardItem();
     propModel->setItem(0, item);
-
-    enum { Type = UserType + 1 };
-
 
     //Set file properties for node
     fileInfo = _fileInfo;
 
-    //setting color so that we can recognize files/dirs
-    if (fileModel->isDir(fileIndex))
-    {
-        setBrush(QBrush(Qt::green));
-    }
-    else
-    {
-        setBrush(QBrush(Qt::cyan));
-    }
-
-    //making view props
-    QString fn = fileInfo.fileName();
+    //Check if Node's name is too long and cut it if so
+    QString fn =
+        (fileInfo.isRoot()) ?
+        fileInfo.absolutePath() :
+        fileInfo.fileName();
     if (fn.length()>15)
     {
         fn.chop(fn.length()-12);
         fn.append("...");
     }
-    QStringList head;
-    head << "Property" << "Value";
-    propModel->setHorizontalHeaderLabels(head);
-    propModel->setItem(0, 0, new QStandardItem("isDir?"));
-    propModel->setItem(1, 0, new QStandardItem("Name"));
-    propModel->setItem(2, 0, new QStandardItem("Path"));
     propModel->setItem(0, 1, new QStandardItem(fileInfo.isDir() ? "Directory" : "File"));
     propModel->setItem(1, 1, new QStandardItem(fileInfo.fileName()));
     propModel->setItem(2, 1, new QStandardItem(fileInfo.filePath()));
 
     nameText = new QGraphicsTextItem("New item", this);
-    nameText->setHtml("<div style='background-color:#FFFFFF; border: solid 3px #000000; padding: 5px 5px 5px 5px; '>" + fn + "</div>");
+    nameText->setHtml("<div style='background-color:#FFFFFF;'>" + fn + "</div>");
 
     QPointF thisPos(QPointF(boundingRect().width()/2 - nameText->boundingRect().width()/2,-25));
     nameText->setPos(thisPos);
@@ -66,11 +48,13 @@ void GraphNode::eraseEdges()
     foreach(GraphEdge *edge, inEdges)
     {
         scene()->removeItem(edge);
+        edge->getSrc()->removeEdge(edge);
     }
     inEdges.erase(inEdges.begin(), inEdges.end());
     foreach(GraphEdge *edge, outEdges)
     {
         scene()->removeItem(edge);
+        edge->getDest()->removeEdge(edge);
     }
     outEdges.erase(outEdges.begin(), outEdges.end());
 }
@@ -95,15 +79,20 @@ QString GraphNode::filePath()
 void GraphNode::addOutEdge(GraphEdge * edge)
 {
     outEdges << edge;
-    edge->setSource(this);
+    //edge->setSource(this);
 }
 
 void GraphNode::addInEdge(GraphEdge *edge)
 {
     inEdges << edge; 
-    edge->setDest(this);
+    //edge->setDest(this);
 }
 
+void GraphNode::removeEdge(GraphEdge *edge)
+{
+    if (!inEdges.removeOne(edge))
+        outEdges.removeOne(edge);
+}
 
 void GraphNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
+#include <QMessageBox>
 #include <QGraphicsScene>
 #include <QList>
 #include <QFileSystemModel>
@@ -28,36 +29,36 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    virtual void keyPressEvent(QKeyEvent *);
-    virtual void keyReleaseEvent(QKeyEvent *);
-    virtual void mousePressEvent(QMouseEvent *);
+    explicit        MainWindow(QWidget *parent = 0);
+    virtual void    keyPressEvent(QKeyEvent *);
+    virtual void    keyReleaseEvent(QKeyEvent *);
+    virtual void    mousePressEvent(QMouseEvent *);
     ~MainWindow();
+
+    void createMenus();
 
 private slots:
     void on_pushRemoveButton_clicked();
-
     void on_pushAddButton_clicked();
+    void on_pushConnectButton_clicked();
+    void on_pushCommentButton_clicked();
 
     void on_actionNew_triggered();
-
-    void on_pushConnectButton_clicked();
 
     void on_gridCheckBox_stateChanged(int arg1);
 
     void refreshItemProps();
 
-    void on_pushCommentButton_clicked();
+    void loadSettings();
+    void saveSettings();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow  *ui;
+    QSettings       *settings;
 
 //File model & tree view of files
-    QFileSystemModel* model;
-
-    QStandardItemModel *curItemPropModel;
-//Graph's members
-    QList< GraphNode * > list;
+    QFileSystemModel    *model;
+    QStandardItemModel  *curItemPropModel;
 
     GraphScene *scene;
 };

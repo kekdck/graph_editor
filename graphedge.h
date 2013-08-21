@@ -8,10 +8,8 @@ class GraphNode;
 class GraphEdge: public QGraphicsLineItem
 {
 public:
+    enum { Type = UserType + 2 };
     GraphEdge(GraphNode *source, GraphNode *destin, QGraphicsItem* parent = 0);
-
-    void setSource(GraphNode *source);
-    void setDest(GraphNode *dest);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
@@ -19,7 +17,12 @@ public:
 
     friend QDebug operator<< (QDebug d, GraphEdge &edge);
 
-    enum { Type = UserType + 2 };
+
+    GraphNode *getSrc() const;
+    void setSrc(GraphNode *value);
+
+    GraphNode *getDest() const;
+    void setDest(GraphNode *value);
 
 private:
     GraphNode *src;

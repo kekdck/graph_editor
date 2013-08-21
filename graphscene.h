@@ -20,6 +20,12 @@ public:
     void addEdge(GraphNode* source, GraphNode* destin);
     void addComment(QGraphicsItem* node);
 
+
+    QFileSystemModel *getFileModel() const;
+    void setFileModel(QFileSystemModel *value);
+
+private:
+    QFileSystemModel *fileModel;
 };
 
 #endif // GRAPHSCENE_H

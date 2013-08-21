@@ -24,16 +24,18 @@ const int HEIGHT = 20;
 class GraphNode: public QGraphicsRectItem
 {
 public:
-    GraphNode(QFileInfo _fileInfo, qreal x=0, qreal y=0);
+    enum { Type = UserType + 1 };
+    GraphNode(QFileInfo _fileInfo, qreal x = 0, qreal y = 0);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 
     QString fileName();
     QString filePath();
 
-    void addOutEdge(GraphEdge* edge);
-    void addInEdge(GraphEdge* edge);
+    void addOutEdge(GraphEdge *edge);
+    void addInEdge(GraphEdge *edge);
 
+    void removeEdge(GraphEdge *edge);
     void eraseEdges();
 
     QStandardItemModel* model();
