@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(scene, SIGNAL(selectionChanged()), this, SLOT(refreshItemProps()));
+    connect(ui->zoomInButton, SIGNAL(clicked()), ui->graphicsView, SLOT(zoomIn()));
+    connect(ui->zoomOutButton, SIGNAL(clicked()), ui->graphicsView, SLOT(zoomOut()));
 }
 
 MainWindow::~MainWindow()
