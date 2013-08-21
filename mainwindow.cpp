@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->splitter->setSizes(sizes);
 
     scene = new QGraphicsScene(-1000, -1000, 2000, 2000, this);
+
     ui->gridCheckBox->setChecked(true);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
@@ -187,10 +188,12 @@ void MainWindow::on_gridCheckBox_stateChanged(int arg1)
     if (arg1)
     {
         scene->setBackgroundBrush(QBrush(QColor(150,150,150), Qt::CrossPattern));
+        setProperty("Grid", QVariant(true));
     }
     else
     {
         scene->setBackgroundBrush(QBrush(QColor(255,255,255)));
+        setProperty("Grid", QVariant(false));
     }
     scene->update();
 }
