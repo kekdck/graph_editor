@@ -15,6 +15,7 @@
 #include "graphitem.h"
 #include "graphedge.h"
 #include "graphcomment.h"
+#include "graphscene.h"
 
 
 namespace Ui {
@@ -30,7 +31,6 @@ public:
     virtual void keyPressEvent(QKeyEvent *);
     virtual void keyReleaseEvent(QKeyEvent *);
     virtual void mousePressEvent(QMouseEvent *);
-    virtual void wheelEvent( QWheelEvent * e );
     ~MainWindow();
 
 private slots:
@@ -43,10 +43,6 @@ private slots:
     void on_pushConnectButton_clicked();
 
     void on_gridCheckBox_stateChanged(int arg1);
-
-    void zoomIn();
-
-    void zoomOut();
 
     void refreshItemProps();
 
@@ -61,7 +57,7 @@ private:
     QStandardItemModel *curItemPropModel;
 //Graph's members
     QList< GraphItem * > list;
-    QGraphicsScene *scene;
+    GraphScene *scene;
 };
 
 #endif // MAINWINDOW_H

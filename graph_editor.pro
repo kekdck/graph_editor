@@ -17,12 +17,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     graphitem.cpp \
     graphedge.cpp \
-    graphcomment.cpp
+    graphcomment.cpp \
+    graphscene.cpp \
+    graphview.cpp
 
 HEADERS  += mainwindow.h \
     graphitem.h \
     graphedge.h \
-    graphcomment.h
+    graphcomment.h \
+    graphscene.h \
+    graphview.h
 
 FORMS    += mainwindow.ui
 

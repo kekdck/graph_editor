@@ -20,11 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView->hideColumn(3);
 
     QList<int> sizes;
-    sizes.push_back(150);
-    sizes.push_back(600);
+    sizes << 150 << 600;
     ui->splitter->setSizes(sizes);
 
-    scene = new QGraphicsScene(-1000, -1000, 2000, 2000, this);
+    scene = new GraphScene(-1000, -1000, 2000, 2000, this);
 
     ui->gridCheckBox->setChecked(true);
     ui->graphicsView->setScene(scene);
@@ -81,19 +80,6 @@ void MainWindow::on_pushRemoveButton_clicked()
     refreshItemProps();
 
     scene->update();
-}
-
-void MainWindow::wheelEvent(QWheelEvent *e)
-{
-    if (e->delta()>0)
-    {
-        zoomIn();
-    }
-    else
-    {
-        zoomOut();
-    }
-    return;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -169,18 +155,6 @@ void MainWindow::on_pushConnectButton_clicked()
 
     scene->clearSelection();
     scene->update();
-}
-
-void MainWindow::zoomIn()
-{
-    if (ui->graphicsView->matrix().m11() > 4) return;
-    ui->graphicsView->scale(1.2, 1.2);
-}
-
-void MainWindow::zoomOut()
-{
-    if (ui->graphicsView->matrix().m11() < 0.4) return;
-    ui->graphicsView->scale(1/1.2, 1/1.2);
 }
 
 void MainWindow::on_gridCheckBox_stateChanged(int arg1)
