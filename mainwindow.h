@@ -57,11 +57,8 @@ private:
 
     QStandardItemModel *curItemPropModel;
 //Graph's members
-<<<<<<< HEAD
     QList< GraphNode * > list;
-=======
-    QList< GraphItem * > list;
->>>>>>> b261cf3054b31b0477d9c90fd98ea0b393a413d7
+
     GraphScene *scene;
 };
 

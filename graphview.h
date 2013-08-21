@@ -7,12 +7,15 @@ class GraphView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit GraphView(QObject *parent = 0);
+    explicit GraphView(QWidget * parent = 0);
     
 signals:
-    
+
 public slots:
-    
+
+    void zoomIn();
+
+    void zoomOut();
 };
 
 #endif // GRAPHVIEW_H
