@@ -16,6 +16,7 @@
 #include "graphnode.h"
 #include "graphedge.h"
 #include "graphcomment.h"
+#include "graphscene.h"
 
 
 namespace Ui {
@@ -31,7 +32,6 @@ public:
     virtual void keyPressEvent(QKeyEvent *);
     virtual void keyReleaseEvent(QKeyEvent *);
     virtual void mousePressEvent(QMouseEvent *);
-    virtual void wheelEvent( QWheelEvent * e );
     ~MainWindow();
 
 private slots:
@@ -45,10 +45,6 @@ private slots:
 
     void on_gridCheckBox_stateChanged(int arg1);
 
-    void zoomIn();
-
-    void zoomOut();
-
     void refreshItemProps();
 
     void on_pushCommentButton_clicked();
@@ -61,7 +57,11 @@ private:
 
     QStandardItemModel *curItemPropModel;
 //Graph's members
+<<<<<<< HEAD
     QList< GraphNode * > list;
+=======
+    QList< GraphItem * > list;
+>>>>>>> b261cf3054b31b0477d9c90fd98ea0b393a413d7
     GraphScene *scene;
 };
 

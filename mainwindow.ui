@@ -85,7 +85,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QGraphicsView" name="graphicsView">
+      <widget class="GraphView" name="graphicsView">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -220,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>740</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -290,6 +290,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GraphView</class>
+   <extends>QGraphicsView</extends>
+   <header>graphview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>

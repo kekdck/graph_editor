@@ -19,12 +19,14 @@ SOURCES += main.cpp\
     graphscene.cpp \
     graphedge.cpp \
     graphnode.cpp
+    graphview.cpp
 
 HEADERS  += mainwindow.h \
     graphcomment.h \
     graphscene.h \
     graphedge.h \
     graphnode.h
+    graphview.h
 
 FORMS    += mainwindow.ui
 
