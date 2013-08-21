@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -24,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sizes.push_back(600);
     ui->splitter->setSizes(sizes);
 
-    scene = new QGraphicsScene(-1000, -1000, 2000, 2000, this);
+    scene = new GraphScene(-1000, -1000, 2000, 2000, this);
 
     ui->gridCheckBox->setChecked(true);
     ui->graphicsView->setScene(scene);
@@ -49,16 +50,8 @@ void MainWindow::on_pushAddButton_clicked()
     QModelIndex index = ui->treeView->currentIndex();
     if(!index.isValid()) return;
 
-    GraphItem* item = new GraphItem(10, 10, 20, 20);
-    item->setFile(index, model);
-    scene->addItem(item);
+    scene->addNode(model->fileInfo(index));
 
-    ui->statusBar->showMessage("Added " + item->fileName(), 4000);
-    list.push_back(item);
-    ui->graphicsView->update();
-#ifdef QT_DEBUG
-    qDebug() << "Pushed index" <<  item->fileName();
-#endif //QT_DEBUG
 }
 
 void MainWindow::on_pushRemoveButton_clicked()
@@ -67,7 +60,7 @@ void MainWindow::on_pushRemoveButton_clicked()
     QList <QGraphicsItem *> items = scene->selectedItems();
     foreach(QGraphicsItem *item, items)
     {
-        GraphItem *grit = qgraphicsitem_cast<GraphItem *>(item);
+        GraphNode *grit = qgraphicsitem_cast<GraphNode *>(item);
         if (grit)
         {
             grit->eraseEdges();
@@ -130,7 +123,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
 
 void MainWindow::on_actionNew_triggered()
 {
-    foreach (GraphItem *item, list)
+    foreach (GraphNode *item, list)
     {
         item->eraseEdges();
         scene->removeItem(item);
@@ -145,27 +138,14 @@ void MainWindow::on_pushConnectButton_clicked()
     QList<QGraphicsItem* > items =  scene->selectedItems();
     if (items.length() == 2)
     {
-        GraphItem* firstItem = qgraphicsitem_cast<GraphItem* >(items.first());
-        GraphItem* lastItem  = qgraphicsitem_cast<GraphItem* >(items.last());
+        GraphNode* firstItem = qgraphicsitem_cast<GraphNode* >(items.first());
+        GraphNode* lastItem  = qgraphicsitem_cast<GraphNode* >(items.last());
 
         if (firstItem && lastItem)
-        {
-            GraphEdge* edge = new GraphEdge(lastItem, firstItem);
-
-            edge->setFlags(QGraphicsItem::ItemIsSelectable
-                           | QGraphicsItem::ItemSendsGeometryChanges);
-            firstItem->addOutEdge(edge);
-            lastItem->addInEdge(edge);
-
-            scene->addItem(edge);
-
-#ifdef QT_DEBUG
-    qDebug() << "created" << *edge;
-#endif //QT_DEBUG
+        {            
+            scene->addEdge(lastItem, firstItem);
         }
     }
-
-
 
     scene->clearSelection();
     scene->update();
@@ -208,15 +188,14 @@ void MainWindow::refreshItemProps()
     }
     if (selection.count() != 1) return;
 
-    GraphItem *item = qgraphicsitem_cast<GraphItem* >(selection.first());
+    GraphNode *item = qgraphicsitem_cast<GraphNode* >(selection.first());
     if (!item) return;
     curItemPropModel = item->model();
     ui->propTreeView->setModel(curItemPropModel);
 
-    ui->treeView->scrollTo(item->index());
-    ui->treeView->setCurrentIndex(item->index());
-
-
+    QModelIndex index = model->index(item->filePath());
+    ui->treeView->scrollTo(index);
+    ui->treeView->setCurrentIndex(index);
 }
 
 void MainWindow::on_pushCommentButton_clicked()
@@ -225,6 +204,6 @@ void MainWindow::on_pushCommentButton_clicked()
 
     if(items.length() == 1 && items.first()->childItems().count() < 2)
     {
-        GraphComment* comment = new GraphComment("default", items.first());
+        scene->addComment(items.first());
     }
 }

@@ -1,24 +1,31 @@
 #include "graphedge.h"
-#include "graphitem.h"
+#include "graphnode.h"
 
-GraphEdge::GraphEdge(GraphItem *source, GraphItem *destin, QGraphicsItem *parent):
+GraphEdge::GraphEdge(GraphNode *source, GraphNode *destin, QGraphicsItem *parent):
     QGraphicsLineItem(source->boundingRect().center().x(), source->boundingRect().center().y(),
                       destin->boundingRect().center().x(), destin->boundingRect().center().y(), parent)
 {
+
+    setFlags(QGraphicsItem::ItemIsSelectable
+                               | QGraphicsItem::ItemSendsGeometryChanges);
     src = source;
     dest = destin;
+
+    src->addOutEdge(this);
+    dest->addInEdge(this);
+
     setAcceptedMouseButtons(0);
     setPen(QPen(QBrush(Qt::black), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }
 
-void GraphEdge::setSource(GraphItem *source)
+void GraphEdge::setSource(GraphNode *source)
 {
     prepareGeometryChange();
     src = source;
 }
 
 
-void GraphEdge::setDest(GraphItem *destin)
+void GraphEdge::setDest(GraphNode *destin)
 {
     prepareGeometryChange();
     dest = destin;

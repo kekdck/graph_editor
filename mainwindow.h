@@ -12,7 +12,8 @@
 #include <QDebug>
 #include <QGraphicsItem>
 
-#include "graphitem.h"
+#include "graphscene.h"
+#include "graphnode.h"
 #include "graphedge.h"
 #include "graphcomment.h"
 
@@ -60,8 +61,8 @@ private:
 
     QStandardItemModel *curItemPropModel;
 //Graph's members
-    QList< GraphItem * > list;
-    QGraphicsScene *scene;
+    QList< GraphNode * > list;
+    GraphScene *scene;
 };
 
 #endif // MAINWINDOW_H

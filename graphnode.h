@@ -1,5 +1,5 @@
-#ifndef GRAPHITEM_H
-#define GRAPHITEM_H
+#ifndef GraphNode_H
+#define GraphNode_H
 #include <QGraphicsItem>
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
@@ -14,17 +14,22 @@
 #include <QDebug>
 #include <QList>
 #include <QVariant>
+#include <QFileInfo>
 
 class GraphEdge;
 
-class GraphItem: public QGraphicsRectItem
+const int WIDTH = 20;
+const int HEIGHT = 20;
+
+class GraphNode: public QGraphicsRectItem
 {
 public:
-    GraphItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem* parent = 0);
+    GraphNode(QFileInfo _fileInfo, qreal x=0, qreal y=0);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    void setFile(QModelIndex index, QFileSystemModel *model);
+
+
     QString fileName();
-    QModelIndex index();
+    QString filePath();
 
     void addOutEdge(GraphEdge* edge);
     void addInEdge(GraphEdge* edge);
@@ -39,7 +44,7 @@ public:
     QRectF boundingRect() const;
 
 
-    friend QDebug operator<< (QDebug d, GraphItem &item);
+    friend QDebug operator<< (QDebug d, GraphNode &item);
 protected:
 
 private:
@@ -48,9 +53,11 @@ private:
 
     QModelIndex fileIndex;
     QFileSystemModel *fileModel;
-    
+
+    QFileInfo fileInfo;
+
     QList<GraphEdge *> outEdges;
     QList<GraphEdge *> inEdges;
 };
 
-#endif // GRAPHITEM_H
+#endif // GraphNode_H

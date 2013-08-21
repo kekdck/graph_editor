@@ -3,15 +3,15 @@
 #include <QGraphicsLineItem>
 #include <QPainter>
 
-class GraphItem;
+class GraphNode;
 
 class GraphEdge: public QGraphicsLineItem
 {
 public:
-    GraphEdge(GraphItem *source, GraphItem *destin, QGraphicsItem* parent = 0);
+    GraphEdge(GraphNode *source, GraphNode *destin, QGraphicsItem* parent = 0);
 
-    void setSource(GraphItem *source);
-    void setDest(GraphItem *dest);
+    void setSource(GraphNode *source);
+    void setDest(GraphNode *dest);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
@@ -22,8 +22,8 @@ public:
     enum { Type = UserType + 2 };
 
 private:
-    GraphItem *src;
-    GraphItem *dest;
+    GraphNode *src;
+    GraphNode *dest;
 
 };
 
