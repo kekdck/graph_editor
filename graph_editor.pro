@@ -15,18 +15,23 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    graphcomment.cpp \
     graphscene.cpp \
     graphedge.cpp \
     graphnode.cpp \
-    graphview.cpp
+    graphview.cpp \
+    graphmodel.cpp \
+    graphvisedge.cpp \
+    graphvisnode.cpp
 
 HEADERS  += mainwindow.h \
-    graphcomment.h \
     graphscene.h \
     graphedge.h \
     graphnode.h \
-    graphview.h
+    graphview.h \
+    graphmodel.h \
+    graphitem.h \
+    graphvisedge.h \
+    graphvisnode.h
 
 FORMS    += mainwindow.ui
 

@@ -1,33 +1,19 @@
 #ifndef GraphNode_H
 #define GraphNode_H
-#include <QGraphicsItem>
-#include <QGraphicsTextItem>
-#include <QGraphicsRectItem>
-#include <QString>
-#include <QPainter>
-#include <QGraphicsScene>
-#include <QFile>
-#include <QTreeView>
-#include <QStandardItemModel>
 #include <QFileSystemModel>
-#include <QMessageBox>
+#include <QGraphicsScene>
 #include <QDebug>
-#include <QList>
-#include <QVariant>
 #include <QFileInfo>
+#include "graphitem.h"
+#include "graphvisnode.h"
 
 class GraphEdge;
 
-const int WIDTH = 20;
-const int HEIGHT = 20;
-
-class GraphNode: public QGraphicsRectItem
+class GraphNode: public GraphItem
 {
 public:
-    enum { Type = UserType + 1 };
-    GraphNode(QFileInfo _fileInfo, qreal x = 0, qreal y = 0);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
+    explicit GraphNode(QFileInfo *_fileInfo);
+    GraphNode();
 
     QString fileName();
     QString filePath();
@@ -35,28 +21,29 @@ public:
     void addOutEdge(GraphEdge *edge);
     void addInEdge(GraphEdge *edge);
 
+    bool connectedDirectlyTo(GraphNode *);
+    int connections();
+
     void removeEdge(GraphEdge *edge);
     void eraseEdges();
 
-    //Selection events
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-    QRectF boundingRect() const;
+    GraphVisNode *mdata;
 
+    QFileInfo *getFileInfo() const;
+    void setFileInfo(QFileInfo *value);
 
-    friend QDebug operator<< (QDebug d, GraphNode &item);
-protected:
+    friend QDebug operator<< (QDebug d, GraphNode &node);
 
 private:
-    QGraphicsTextItem *nameText;
-
     QModelIndex fileIndex;
     QFileSystemModel *fileModel;
 
-    QFileInfo fileInfo;
+    QFileInfo *fileInfo;
 
     QList<GraphEdge *> outEdges;
     QList<GraphEdge *> inEdges;
 };
+
+Q_DECLARE_METATYPE(GraphNode *)
 
 #endif // GraphNode_H

@@ -6,8 +6,8 @@ GraphScene::GraphScene(QObject *parent) :
     init();
 }
 
-GraphScene::GraphScene(qreal x, qreal y, qreal width, qreal height, QObject *parent) :
-    QGraphicsScene(x, y, width, height, parent)
+GraphScene::GraphScene(GraphModel *mod, qreal x, qreal y, qreal width, qreal height, QObject *parent) :
+    QGraphicsScene(x, y, width, height, parent), graphModel(mod)
 {
     init();
 }
@@ -18,7 +18,7 @@ void GraphScene::refreshItemProps()
     QList <QGraphicsItem *> selection = selectedItems();
     if (selection.isEmpty()) return;
     //Check if it is Node
-    GraphNode *item = qgraphicsitem_cast<GraphNode *>(selection.first());
+    GraphVisNode *item = qgraphicsitem_cast<GraphVisNode *>(selection.first());
     if (!item) return;
 
     for (int i = 0; i < 10; i++)
@@ -40,19 +40,22 @@ void GraphScene::setFileModel(QFileSystemModel *value)
     fileModel = value;
 }
 
-void GraphScene::addNode(QFileInfo _fileinfo)
+void GraphScene::addNode(QFileInfo *_fileinfo)
 {
-    GraphNode* node = new GraphNode(_fileinfo);
+    GraphNode *node = graphModel->addNode(_fileinfo);
+    GraphVisNode *visNode = new GraphVisNode(node, 0, 0, 20, 20);
 
-    node->setBrush(QBrush( (_fileinfo.isDir()) ? Qt::green : Qt::yellow));
-    addItem(node);
+    node->mdata = visNode;
+    addItem(visNode);
 }
 
-void GraphScene::addEdge(GraphNode *source, GraphNode *destin)
+void GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
 {
-    GraphEdge *edge = new GraphEdge(source, destin);
+    GraphEdge *edge = graphModel->addEdge(source->mdata, destin->mdata);
+    GraphVisEdge *visEdge = new GraphVisEdge(edge);
 
-    addItem(edge);
+    edge->mdata = visEdge;
+    addItem(visEdge);
 }
 
 QStandardItemModel *GraphScene::getCurItemPropModel() const
@@ -65,9 +68,26 @@ void GraphScene::setCurItemPropModel(QStandardItemModel *value)
     curItemPropModel = value;
 }
 
-void GraphScene::addComment(QGraphicsItem *node)
+void GraphScene::addComment(GraphVisNode *node)
 {
-    GraphComment* comment = new GraphComment("default", node);
+    QGraphicsTextItem* comment = new QGraphicsTextItem("Type text here", node);
+    node->mdata->comment = comment->document();
+    comment->setPos(node->boundingRect().center().x() + 30,
+                    node->boundingRect().center().y() + 30);
+    comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    comment->setTextInteractionFlags(Qt::TextEditable);
+
+    addItem(comment);
+}
+
+void GraphScene::addComment(GraphVisEdge *edge)
+{
+    QGraphicsTextItem* comment = new QGraphicsTextItem("Type text here", edge);
+    edge->mdata->comment = comment->document();
+    comment->setPos(edge->boundingRect().center().x() + 10,
+                    edge->boundingRect().center().y() + 15);
+    comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    comment->setTextInteractionFlags(Qt::TextEditable);
 
     addItem(comment);
 }

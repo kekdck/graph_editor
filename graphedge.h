@@ -1,22 +1,15 @@
 #ifndef GRAPHEDGE_H
 #define GRAPHEDGE_H
-#include <QGraphicsLineItem>
-#include <QPainter>
+#include "graphitem.h"
+#include "graphvisedge.h"
 
 class GraphNode;
 
-class GraphEdge: public QGraphicsLineItem
+class GraphEdge: public GraphItem
 {
 public:
-    enum { Type = UserType + 2 };
-    GraphEdge(GraphNode *source, GraphNode *destin, QGraphicsItem* parent = 0);
-
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-    QRectF boundingRect() const;
-
-    friend QDebug operator<< (QDebug d, GraphEdge &edge);
-
+    explicit GraphEdge(GraphNode *source, GraphNode *destin);
+    GraphEdge();
 
     GraphNode *getSrc() const;
     void setSrc(GraphNode *value);
@@ -24,10 +17,15 @@ public:
     GraphNode *getDest() const;
     void setDest(GraphNode *value);
 
+    GraphVisEdge *mdata;
+
+    friend QDebug operator<<(QDebug d, GraphEdge &edge);
 private:
     GraphNode *src;
     GraphNode *dest;
 
 };
+
+Q_DECLARE_METATYPE(GraphEdge *)
 
 #endif // GRAPHEDGE_H

@@ -1,145 +1,93 @@
 #include "graphnode.h"
 #include "graphedge.h"
 
-GraphNode::GraphNode(QFileInfo _fileInfo, qreal x, qreal y):
-    QGraphicsRectItem(x, y, WIDTH, HEIGHT, 0)
+GraphNode::GraphNode()
 {
-    setFlags(QGraphicsItem::ItemIsMovable
-             | QGraphicsItem::ItemIsSelectable
-             | ItemSendsGeometryChanges);
-    setCacheMode(DeviceCoordinateCache);
-    setZValue(1);
+}
 
-    //Set file properties for node
-    fileInfo = _fileInfo;
-
-    //Check if Node's name is too long and cut it if so
-    QString fn =
-        (fileInfo.isRoot()) ?
-        fileInfo.absolutePath() :
-        fileInfo.fileName();
-    if (fn.length()>15)
-    {
-        fn.chop(fn.length()-12);
-        fn.append("...");
-    }
-
-    nameText = new QGraphicsTextItem("New item", this);
-    nameText->setHtml("<div style='background-color:#FFFFFF;'>" + fn + "</div>");
-
-    QPointF thisPos(QPointF(boundingRect().width()/2 - nameText->boundingRect().width()/2,-25));
-    nameText->setPos(thisPos);
+GraphNode::GraphNode(QFileInfo *_fileInfo) : fileInfo(_fileInfo)
+{
 }
 
 void GraphNode::eraseEdges()
 {
     foreach(GraphEdge *edge, inEdges)
     {
-        scene()->removeItem(edge);
+        mdata->scene()->removeItem(edge->mdata);
         edge->getSrc()->removeEdge(edge);
     }
     inEdges.erase(inEdges.begin(), inEdges.end());
     foreach(GraphEdge *edge, outEdges)
     {
-        scene()->removeItem(edge);
+        mdata->scene()->removeItem(edge->mdata);
         edge->getDest()->removeEdge(edge);
     }
     outEdges.erase(outEdges.begin(), outEdges.end());
 }
 
-void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+QFileInfo *GraphNode::getFileInfo() const
 {
-    painter->setBrush(brush());
-    painter->setPen(pen());
-    painter->drawRect(rect());
+    return fileInfo;
+}
+
+void GraphNode::setFileInfo(QFileInfo *value)
+{
+    fileInfo = value;
+}
+
+QDebug operator<<(QDebug d, GraphNode &node)
+{
+    d << "Name: " << node.name << ", comment: " << node.comment->toPlainText() << ", connections: "
+         << node.connections();
+    return d;
 }
 
 QString GraphNode::fileName()
 {
-    return fileInfo.fileName();
+    return fileInfo->fileName();
 }
 
 QString GraphNode::filePath()
 {
-    return fileInfo.filePath();
+    return fileInfo->filePath();
 }
 
 void GraphNode::addOutEdge(GraphEdge * edge)
 {
     outEdges << edge;
-    //edge->setSource(this);
 }
 
 void GraphNode::addInEdge(GraphEdge *edge)
 {
-    inEdges << edge; 
-    //edge->setDest(this);
+    inEdges << edge;
+}
+
+bool GraphNode::connectedDirectlyTo(GraphNode *node)
+{
+    foreach(GraphEdge *edge, inEdges)
+    {
+        if (edge->getSrc() == node)
+        {
+            return true;
+        }
+    }
+    foreach(GraphEdge *edge, outEdges)
+    {
+        if (edge->getDest() == node)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+int GraphNode::connections()
+{
+    return inEdges.size() + outEdges.size();
 }
 
 void GraphNode::removeEdge(GraphEdge *edge)
 {
     if (!inEdges.removeOne(edge))
         outEdges.removeOne(edge);
-}
-
-void GraphNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
-{
-    QGraphicsRectItem::mouseDoubleClickEvent(event);
-    //Here is better to implement scrolling to this->fileIndex in mainwindow->treeView
-
-}
-
-QRectF GraphNode::boundingRect() const
-{
-    return rect();
-}
-
-QDebug operator<< (QDebug d, GraphNode &item)
-{
-    d << item.fileName() << "(" << item.x() << ";" << item.y() << ")"
-      << "connections: " << item.inEdges.count()+item.outEdges.count();
-    return d;
-}
-
-
-QVariant GraphNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
-{
-    switch (change)
-    {
-    case ItemPositionHasChanged:
-        {
-            scene()->update();
-        } break;
-    case ItemSelectedChange:
-        {
-#ifdef QT_DEBUG
-        qDebug() << "changed selection of " << *this;
-#endif //QT_DEBUG
-            if (value == true)
-            {
-                QBrush br = brush();
-                QColor col = br.color();
-                col.setAlpha(100);
-                br.setColor(col);
-                setBrush(br);
-            }
-            else
-            {
-                QBrush br = brush();
-                QColor col = br.color();
-                col.setAlpha(255);
-                br.setColor(col);
-                setBrush(br);
-            }
-            scene()->update();
-        } break;
-    default:
-        {
-#ifdef QT_DEBUG
-            //qDebug() << "Unknown GraphNode change, can\'t handle";
-#endif
-        } break;
-    }
-    
-    return QGraphicsItem::itemChange(change, value);
 }

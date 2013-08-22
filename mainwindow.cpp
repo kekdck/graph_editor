@@ -7,9 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    model = new QFileSystemModel(this);
-    scene = new GraphScene(-1000, -1000, 2000, 2000, this);
+
+    Fmodel = new QFileSystemModel(this);
     settings = new QSettings("OSLL", "SrcGraph", this);
+    Gmodel = new GraphModel(this);
+    scene = new GraphScene(Gmodel,-1000, -1000, 2000, 2000, this);
 
     ui->propTreeView->setModel(scene->getCurItemPropModel());
     createMenus();
@@ -17,10 +19,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->propTreeView->horizontalHeader()->hide();
 
     //Setup model and treeView
-    model->setRootPath("");
-    ui->treeView->setModel(model);
+    Fmodel->setRootPath("");
+    ui->treeView->setModel(Fmodel);
 
-    QModelIndex index = model->index("/");
+    QModelIndex index = Fmodel->index("/");
     ui->treeView->setCurrentIndex(index);
 
     ui->treeView->hideColumn(1);
@@ -31,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sizes << 150 << 600;
     ui->splitter->setSizes(sizes);
 
-    scene->setFileModel(model);
+    scene->setFileModel(Fmodel);
 
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
@@ -104,7 +106,7 @@ void MainWindow::on_pushAddButton_clicked()
     QModelIndex index = ui->treeView->currentIndex();
     if(!index.isValid()) return;
 
-    scene->addNode(model->fileInfo(index));
+    scene->addNode(new QFileInfo(Fmodel->fileInfo(index)));
 }
 
 void MainWindow::on_pushRemoveButton_clicked()
@@ -113,12 +115,11 @@ void MainWindow::on_pushRemoveButton_clicked()
     QList <QGraphicsItem *> items = scene->selectedItems();
     foreach(QGraphicsItem *item, items)
     {
-        GraphNode *grit = dynamic_cast<GraphNode *>(item);
-        if (grit)
+        GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(item);
+        if (gvn)
         {
-            grit->eraseEdges();
-            scene->removeItem(grit);
-            scene->items().removeOne(grit);
+            gvn->eraseEdges();
+            scene->removeItem(gvn);
         }
     }
     scene->clearSelection();
@@ -167,8 +168,8 @@ void MainWindow::on_pushConnectButton_clicked()
     QList<QGraphicsItem* > items =  scene->selectedItems();
     if (items.length() == 2)
     {
-        GraphNode *firstItem = dynamic_cast<GraphNode *>(items.at(0));
-        GraphNode *lastItem  = dynamic_cast<GraphNode *>(items.at(1));
+        GraphVisNode *firstItem = dynamic_cast<GraphVisNode *>(items.at(0));
+        GraphVisNode *lastItem  = dynamic_cast<GraphVisNode *>(items.at(1));
 
         qDebug() << firstItem << lastItem;
         if (firstItem && lastItem)
@@ -201,6 +202,17 @@ void MainWindow::on_pushCommentButton_clicked()
 
     if(items.length() == 1 && items.first()->childItems().count() < 2)
     {
-        scene->addComment(items.first());
+        GraphVisEdge *edge = dynamic_cast<GraphVisEdge *>(items.at(0));
+        if (edge)
+        {
+            scene->addComment(edge);
+            return;
+        }
+        GraphVisNode *node = dynamic_cast<GraphVisNode *>(items.at(0));
+        if (node)
+        {
+            scene->addComment(node);
+            return;
+        }
     }
 }

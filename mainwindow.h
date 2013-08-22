@@ -13,10 +13,13 @@
 #include <QDebug>
 #include <QGraphicsItem>
 
-#include "graphscene.h"
 #include "graphnode.h"
 #include "graphedge.h"
-#include "graphcomment.h"
+
+#include "graphvisedge.h"
+#include "graphvisnode.h"
+
+#include "graphmodel.h"
 #include "graphscene.h"
 
 
@@ -55,7 +58,8 @@ private:
     QSettings       *settings;
 
 //File model & tree view of files
-    QFileSystemModel    *model;
+    QFileSystemModel *Fmodel;
+    GraphModel *Gmodel;
     GraphScene *scene;
 };
 
