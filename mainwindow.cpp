@@ -36,22 +36,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     //Connecting actions
-    connect(ui->actionClear, SIGNAL(triggered()), scene, SLOT(clear()));
-    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
-    connect(scene, SIGNAL(selectionChanged()), scene, SLOT(refreshItemProps()));
+    connect(ui->actionClear, &QAction::triggered, scene, &GraphScene::clear);
+    connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
+    connect(scene, &GraphScene::selectionChanged, scene, &GraphScene::refreshItemProps);
     //Zoom buttons
-    connect(ui->actionZoomIn, SIGNAL(triggered()), ui->graphicsView, SLOT(zoomIn()));
-    connect(ui->actionZoomOut, SIGNAL(triggered()), ui->graphicsView, SLOT(zoomOut()));
+    connect(ui->actionZoomIn, &QAction::triggered, ui->graphicsView, &GraphView::zoomIn);
+    connect(ui->actionZoomOut, &QAction::triggered, ui->graphicsView, &GraphView::zoomOut);
 
-    connect(ui->zoomInButton, SIGNAL(clicked()), ui->actionZoomIn, SLOT(trigger()));
-    connect(ui->zoomOutButton, SIGNAL(clicked()), ui->actionZoomOut, SLOT(trigger()));
+    connect(ui->zoomInButton, &QPushButton::clicked, ui->actionZoomIn, &QAction::trigger);
+    connect(ui->zoomOutButton, &QPushButton::clicked, ui->actionZoomOut, &QAction::trigger);
     //Settings
-    connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(saveSettings()));
-    connect(this, SIGNAL(destroyed()), this, SLOT(saveSettings()));
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::saveSettings);
 }
 
 MainWindow::~MainWindow()
 {
+    saveSettings();
     delete ui;
 }
 
