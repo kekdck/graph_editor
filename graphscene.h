@@ -20,12 +20,22 @@ public:
     void addEdge(GraphNode* source, GraphNode* destin);
     void addComment(QGraphicsItem* node);
 
+    void init();
 
     QFileSystemModel *getFileModel() const;
     void setFileModel(QFileSystemModel *value);
 
+    QStandardItemModel *getCurItemPropModel() const;
+    void setCurItemPropModel(QStandardItemModel *value);
+
 private:
+
+    QStandardItemModel *curItemPropModel;
     QFileSystemModel *fileModel;
+
+public slots:
+
+    void refreshItemProps();
 };
 
 #endif // GRAPHSCENE_H

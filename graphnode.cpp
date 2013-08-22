@@ -10,10 +10,6 @@ GraphNode::GraphNode(QFileInfo _fileInfo, qreal x, qreal y):
     setCacheMode(DeviceCoordinateCache);
     setZValue(1);
 
-    propModel = new QStandardItemModel(10, 2);
-    QStandardItem *item = new QStandardItem();
-    propModel->setItem(0, item);
-
     //Set file properties for node
     fileInfo = _fileInfo;
 
@@ -27,20 +23,12 @@ GraphNode::GraphNode(QFileInfo _fileInfo, qreal x, qreal y):
         fn.chop(fn.length()-12);
         fn.append("...");
     }
-    propModel->setItem(0, 1, new QStandardItem(fileInfo.isDir() ? "Directory" : "File"));
-    propModel->setItem(1, 1, new QStandardItem(fileInfo.fileName()));
-    propModel->setItem(2, 1, new QStandardItem(fileInfo.filePath()));
 
     nameText = new QGraphicsTextItem("New item", this);
     nameText->setHtml("<div style='background-color:#FFFFFF;'>" + fn + "</div>");
 
     QPointF thisPos(QPointF(boundingRect().width()/2 - nameText->boundingRect().width()/2,-25));
     nameText->setPos(thisPos);
-}
-
-QStandardItemModel* GraphNode::model()
-{
-    return propModel;
 }
 
 void GraphNode::eraseEdges()

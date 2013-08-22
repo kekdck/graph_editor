@@ -38,8 +38,6 @@ public:
     void removeEdge(GraphEdge *edge);
     void eraseEdges();
 
-    QStandardItemModel* model();
-
     //Selection events
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
@@ -50,7 +48,6 @@ public:
 protected:
 
 private:
-    QStandardItemModel *propModel;
     QGraphicsTextItem *nameText;
 
     QModelIndex fileIndex;

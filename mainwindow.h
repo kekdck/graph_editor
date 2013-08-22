@@ -47,8 +47,6 @@ private slots:
 
     void on_gridCheckBox_stateChanged(int arg1);
 
-    void refreshItemProps();
-
     void loadSettings();
     void saveSettings();
 
@@ -58,8 +56,6 @@ private:
 
 //File model & tree view of files
     QFileSystemModel    *model;
-    QStandardItemModel  *curItemPropModel;
-
     GraphScene *scene;
 };
 

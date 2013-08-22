@@ -11,8 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
     scene = new GraphScene(-1000, -1000, 2000, 2000, this);
     settings = new QSettings("OSLL", "SrcGraph", this);
 
+    ui->propTreeView->setModel(scene->getCurItemPropModel());
     createMenus();
     loadSettings();
+    ui->propTreeView->horizontalHeader()->hide();
 
     //Setup model and treeView
     model->setRootPath("");
@@ -36,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Connecting actions
     connect(ui->actionClear, SIGNAL(triggered()), scene, SLOT(clear()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
-    connect(scene, SIGNAL(selectionChanged()), this, SLOT(refreshItemProps()));
+    connect(scene, SIGNAL(selectionChanged()), scene, SLOT(refreshItemProps()));
     //Zoom buttons
     connect(ui->actionZoomIn, SIGNAL(triggered()), ui->graphicsView, SLOT(zoomIn()));
     connect(ui->actionZoomOut, SIGNAL(triggered()), ui->graphicsView, SLOT(zoomOut()));
@@ -93,7 +95,7 @@ void MainWindow::saveSettings()
 
 void MainWindow::mousePressEvent(QMouseEvent *)
 {
-    refreshItemProps();
+    //anything you want
 }
 
 void MainWindow::on_pushAddButton_clicked()
@@ -120,9 +122,6 @@ void MainWindow::on_pushRemoveButton_clicked()
         }
     }
     scene->clearSelection();
-
-    refreshItemProps();
-
     scene->update();
 }
 
@@ -194,25 +193,6 @@ void MainWindow::on_gridCheckBox_stateChanged(int arg1)
         setProperty("Grid", QVariant(false));
     }
     scene->update();
-}
-
-void MainWindow::refreshItemProps()
-{
-    QList <QGraphicsItem *> selection = scene->selectedItems();
-    if (selection.count() != 1)
-    {
-        ui->propTreeView->setModel(0);
-        return;
-    }
-
-    GraphNode *item = qgraphicsitem_cast<GraphNode *>(selection.first());
-    if (!item) return;
-    curItemPropModel = item->model();
-    ui->propTreeView->setModel(curItemPropModel);
-
-    QModelIndex index = model->index(item->filePath());
-    ui->treeView->scrollTo(index);
-    ui->treeView->setCurrentIndex(index);
 }
 
 void MainWindow::on_pushCommentButton_clicked()
