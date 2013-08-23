@@ -46,7 +46,7 @@ void GraphVisNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 QRectF GraphVisNode::boundingRect() const
 {
-    return rect();
+    return QGraphicsRectItem::boundingRect();
 }
 
 QString GraphVisNode::fileName()
@@ -66,7 +66,8 @@ void GraphVisNode::addOutEdge(GraphEdge *edge)
 
 QDebug operator<< (QDebug d, GraphVisNode &item)
 {
-    d << item.mdata;
+    d << "VisNode: " << item.fileName()
+      << ", pos: " << item.pos();
     return d;
 }
 
@@ -75,32 +76,50 @@ QVariant GraphVisNode::itemChange(QGraphicsItem::GraphicsItemChange change, cons
     switch (change)
     {
     case ItemPositionHasChanged:
+    {
+        QPointF newPos = value.toPointF();
+        QRectF rect = scene()->sceneRect();
+
+        foreach(GraphEdge *e, mdata->getInEdges())
         {
-            scene()->update();
-        } break;
+            e->mdata->refreshGeometry();
+        }
+        foreach(GraphEdge *e, mdata->getOutEdges())
+        {
+            e->mdata->refreshGeometry();
+        }
+        if (!rect.contains(newPos))
+        {
+            //Save node inside scene
+            newPos.setX(qMin(rect.right(), qMax(newPos.x(), rect.left())));
+            newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())));
+            return newPos;
+        }
+        scene()->update();
+    } break;
     case ItemSelectedChange:
-        {
+    {
 #ifdef QT_DEBUG
         qDebug() << "changed selection of " << *this;
 #endif //QT_DEBUG
-            if (value == true)
-            {
-                QBrush br = brush();
-                QColor col = br.color();
-                col.setAlpha(100);
-                br.setColor(col);
-                setBrush(br);
-            }
-            else
-            {
-                QBrush br = brush();
-                QColor col = br.color();
-                col.setAlpha(255);
-                br.setColor(col);
-                setBrush(br);
-            }
-            scene()->update();
-        } break;
+        if (value == true)
+        {
+            QBrush br = brush();
+            QColor col = br.color();
+            col.setAlpha(100);
+            br.setColor(col);
+            setBrush(br);
+        }
+        else
+        {
+            QBrush br = brush();
+            QColor col = br.color();
+            col.setAlpha(255);
+            br.setColor(col);
+            setBrush(br);
+        }
+        scene()->update();
+    } break;
     default:
         {
 #ifdef QT_DEBUG

@@ -29,6 +29,8 @@ public:
 
     GraphVisNode *mdata;
 
+    QList<GraphEdge *> getOutEdges();
+    QList<GraphEdge *> getInEdges();
     QFileInfo *getFileInfo() const;
     void setFileInfo(QFileInfo *value);
 

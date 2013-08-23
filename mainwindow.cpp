@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     //Connecting actions
+    connect(ui->pushEditButton, &QPushButton::clicked, ui->actionEdit, &QAction::trigger);
+    connect(ui->actionEdit, &QAction::triggered, ui->graphicsView, &GraphView::openEdit);
+
     connect(ui->actionClear, &QAction::triggered, scene, &GraphScene::clear);
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
     connect(scene, &GraphScene::selectionChanged, scene, &GraphScene::refreshItemProps);
@@ -132,7 +135,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
     {
     case Qt::Key_Shift:
         {
-            ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+            ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
         }break;
     default:
         {
@@ -148,7 +151,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
     {
     case Qt::Key_Shift:
         {
-            ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+            ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
         }break;
     default:
         {
@@ -165,16 +168,22 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_pushConnectButton_clicked()
 {
-    QList<QGraphicsItem* > items =  scene->selectedItems();
-    if (items.length() == 2)
+    QList<QGraphicsItem *> items =  scene->selectedItems();
+    QList<GraphVisNode *> gvns;
+    foreach (QGraphicsItem *it, items)
     {
-        GraphVisNode *firstItem = dynamic_cast<GraphVisNode *>(items.at(0));
-        GraphVisNode *lastItem  = dynamic_cast<GraphVisNode *>(items.at(1));
-
-        qDebug() << firstItem << lastItem;
-        if (firstItem && lastItem)
+        GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(it);
+        if (gvn)
         {
-            scene->addEdge(firstItem, lastItem);
+            gvns.push_back(gvn);
+        }
+    }
+
+    if (gvns.length() == 2)
+    {
+        if (!gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata))
+        {
+            scene->addEdge(gvns.at(0), gvns.at(1));
         }
     }
     scene->clearSelection();

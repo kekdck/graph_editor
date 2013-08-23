@@ -28,6 +28,7 @@ public:
 
     void init();
 
+
     QFileSystemModel *getFileModel() const;
     void setFileModel(QFileSystemModel *value);
 

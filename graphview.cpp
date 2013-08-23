@@ -5,6 +5,11 @@ GraphView::GraphView(QWidget *parent) :
 {
 }
 
+void GraphView::openEdit()
+{
+
+}
+
 void GraphView::contextMenuEvent(QContextMenuEvent *event)
 {
     if (!contextMenu) return;

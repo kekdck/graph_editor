@@ -8,5 +8,6 @@
         <file>icons/zoom-out-icon.png</file>
         <file>icons/layer-grid-icon.png</file>
         <file>icons/cloud.png</file>
+        <file>icons/pencil-blue-icon.png</file>
     </qresource>
 </RCC>

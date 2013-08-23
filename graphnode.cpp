@@ -25,6 +25,11 @@ void GraphNode::eraseEdges()
     outEdges.erase(outEdges.begin(), outEdges.end());
 }
 
+QList<GraphEdge *> GraphNode::getOutEdges()
+{
+    return outEdges;
+}
+
 QFileInfo *GraphNode::getFileInfo() const
 {
     return fileInfo;
@@ -90,4 +95,10 @@ void GraphNode::removeEdge(GraphEdge *edge)
 {
     if (!inEdges.removeOne(edge))
         outEdges.removeOne(edge);
+}
+
+
+QList<GraphEdge *> GraphNode::getInEdges()
+{
+    return inEdges;
 }

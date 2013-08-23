@@ -17,8 +17,12 @@ public:
     explicit GraphVisEdge(GraphEdge *_data, QGraphicsItem *parent = 0);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+    void refreshGeometry();
 
     QRectF boundingRect() const;
+    QPainterPath shape() const;
 
     friend QDebug operator<< (QDebug d, GraphVisEdge &edge);
 

@@ -56,6 +56,7 @@ void GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
 
     edge->mdata = visEdge;
     addItem(visEdge);
+    update();
 }
 
 QStandardItemModel *GraphScene::getCurItemPropModel() const
@@ -75,9 +76,8 @@ void GraphScene::addComment(GraphVisNode *node)
     comment->setPos(node->boundingRect().center().x() + 30,
                     node->boundingRect().center().y() + 30);
     comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-    comment->setTextInteractionFlags(Qt::TextEditable);
 
-    addItem(comment);
+    //Item is already added when created by passing parent
 }
 
 void GraphScene::addComment(GraphVisEdge *edge)
@@ -87,9 +87,6 @@ void GraphScene::addComment(GraphVisEdge *edge)
     comment->setPos(edge->boundingRect().center().x() + 10,
                     edge->boundingRect().center().y() + 15);
     comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-    comment->setTextInteractionFlags(Qt::TextEditable);
-
-    addItem(comment);
 }
 
 void GraphScene::init()

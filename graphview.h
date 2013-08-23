@@ -11,6 +11,7 @@ class GraphView : public QGraphicsView
 public:
     explicit GraphView(QWidget * parent = 0);
 
+
     QMenu *getContextMenu() const;
     void setContextMenu(QMenu *value);
 
@@ -24,6 +25,7 @@ private:
     QMenu *contextMenu;
 
 public slots:
+    void openEdit();
 
     void zoomIn();
 

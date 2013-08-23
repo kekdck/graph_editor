@@ -104,7 +104,7 @@
         <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
        </property>
        <property name="dragMode">
-        <enum>QGraphicsView::ScrollHandDrag</enum>
+        <enum>QGraphicsView::RubberBandDrag</enum>
        </property>
        <property name="transformationAnchor">
         <enum>QGraphicsView::AnchorUnderMouse</enum>
@@ -181,7 +181,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -202,6 +202,17 @@
          <property name="icon">
           <iconset resource="icons.qrc">
            <normaloff>:/icons/icons/cloud.png</normaloff>:/icons/icons/cloud.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="pushEditButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="icons.qrc">
+           <normaloff>:/icons/icons/pencil-blue-icon.png</normaloff>:/icons/icons/pencil-blue-icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -242,6 +253,7 @@
     <addaction name="separator"/>
     <addaction name="actionZoomIn"/>
     <addaction name="actionZoomOut"/>
+    <addaction name="actionEdit"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
@@ -313,6 +325,9 @@
    <property name="toolTip">
     <string>Увеличивает вид на 20%</string>
    </property>
+   <property name="shortcut">
+    <string>+</string>
+   </property>
   </action>
   <action name="actionZoomOut">
    <property name="icon">
@@ -324,6 +339,24 @@
    </property>
    <property name="toolTip">
     <string>Уменьшает вид на 20%</string>
+   </property>
+   <property name="shortcut">
+    <string>-</string>
+   </property>
+  </action>
+  <action name="actionEdit">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/pencil-blue-icon.png</normaloff>:/icons/icons/pencil-blue-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Редактировать</string>
+   </property>
+   <property name="toolTip">
+    <string>Открыть окно редактирования элемента</string>
+   </property>
+   <property name="shortcut">
+    <string>E</string>
    </property>
   </action>
  </widget>
