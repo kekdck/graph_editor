@@ -23,7 +23,6 @@ void GraphVisEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     //qDebug() << "called paint graphedge from" << *src << " to " << *dest;
     //qDebug() << "drawing graphedge from " << begin << " to " << end;
 #endif //QT_DEBUG
-    painter->translate(-x(), -y());
     painter->drawLine(line());
 }
 
@@ -55,13 +54,18 @@ QVariant GraphVisEdge::itemChange(QGraphicsItem::GraphicsItemChange change, cons
 void GraphVisEdge::refreshGeometry()
 {
     prepareGeometryChange();
-    setLine(src->x() + src->boundingRect().width()/2,
-            src->y() + src->boundingRect().width()/2,
-            dest->x() + dest->boundingRect().center().x(),
-            dest->y() + dest->boundingRect().center().y());
+    qreal   srcCX = src->x() + src->boundingRect().center().x(),
+            srcCY = src->y() + src->boundingRect().center().x(),
+            destCX = dest->x() + dest->boundingRect().center().x(),
+            destCY = dest->y() + dest->boundingRect().center().y(),
+            posX = (srcCX + destCX) / 2,
+            posY = (srcCY + destCY) / 2;
+    QPointF begin(srcCX - posX, srcCY - posY),
+            end(destCX - posX, destCY - posY);
+    setX( posX );
+    setY( posY );
+    setLine( QLineF(begin, end) );
     qDebug() << "Src: " << src->pos() << ", Dest: " << dest->pos() << ", LINE: " << line();
-    setX( (line().x1() + line().x2()) / 2 );
-    setY( (line().y1() + line().y2()) / 2 );
 }
 
 QRectF GraphVisEdge::boundingRect() const
