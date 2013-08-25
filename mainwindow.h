@@ -23,8 +23,6 @@
 #include "graphmodel.h"
 #include "graphscene.h"
 
-#include "grmlsaver.h"
-
 namespace Ui {
 class MainWindow;
 }
@@ -43,19 +41,25 @@ public:
     void createMenus();
 
 private slots:
-    void on_pushRemoveButton_clicked();
-    void on_pushAddButton_clicked();
-    void on_pushConnectButton_clicked();
-    void on_pushCommentButton_clicked();
 
     void on_actionNew_triggered();
-
-    void on_gridCheckBox_stateChanged(int arg1);
 
     void loadSettings();
     void saveSettings();
 
     void on_actionSave_triggered();
+
+    void on_actionAdd_triggered();
+
+    void on_actionRemove_triggered();
+
+    void on_actionConnect_triggered();
+
+    void on_actionAddComment_triggered();
+
+    void on_actionGrid_toggled(bool arg1);
+
+    void on_actionDisconnect_triggered();
 
 private:
     Ui::MainWindow  *ui;

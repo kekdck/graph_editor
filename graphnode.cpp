@@ -69,23 +69,23 @@ void GraphNode::addInEdge(GraphEdge *edge)
     inEdges << edge;
 }
 
-bool GraphNode::connectedDirectlyTo(GraphNode *node)
+GraphEdge *GraphNode::connectedDirectlyTo(GraphNode *node)
 {
     foreach(GraphEdge *edge, inEdges)
     {
         if (edge->getSrc() == node)
         {
-            return true;
+            return edge;
         }
     }
     foreach(GraphEdge *edge, outEdges)
     {
         if (edge->getDest() == node)
         {
-            return true;
+            return edge;
         }
     }
-    return false;
+    return NULL;
 }
 
 int GraphNode::connections()
@@ -96,7 +96,12 @@ int GraphNode::connections()
 void GraphNode::removeEdge(GraphEdge *edge)
 {
     if (!inEdges.removeOne(edge))
+    {
         outEdges.removeOne(edge);
+    }
+    else
+    {
+    }
 }
 
 

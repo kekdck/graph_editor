@@ -3,7 +3,8 @@
 GraphModel::GraphModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    next_id = 0;
+    next_Nodeid = 0;
+    next_Edgeid = 0;
 }
 
 GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
@@ -13,6 +14,8 @@ GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
         return 0; //Nodes are already connected by some edge
     }
     GraphEdge *edge = new GraphEdge(src, dest);
+    edge->setId(next_Edgeid);
+    next_Edgeid++;
     edges.push_back(edge);
     return edge;
 }
@@ -20,8 +23,8 @@ GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
 GraphNode *GraphModel::addNode(QFileInfo *_fileinfo)
 {
     GraphNode *node = new GraphNode(_fileinfo);
-    node->setId(next_id);
-    next_id++;
+    node->setId(next_Nodeid);
+    next_Nodeid++;
     nodes.push_back(node);
     return node;
 }
@@ -67,8 +70,12 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const
     switch (role)
     {
     case Qt::DisplayRole:
+        return QVariant::fromValue(nodes.at(index.row())->name);
+    case SaveNodeRole:
         return QVariant::fromValue(nodes.at(index.row()));
-        break;
+    case SaveEdgeRole:
+        return QVariant::fromValue(edges.at(index.row()));
+
     }
     return QVariant();
 }

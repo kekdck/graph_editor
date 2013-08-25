@@ -12,24 +12,6 @@ GraphScene::GraphScene(GraphModel *mod, qreal x, qreal y, qreal width, qreal hei
     init();
 }
 
-void GraphScene::refreshItemProps()
-{
-    //Check if only 1 element selected
-    QList <QGraphicsItem *> selection = selectedItems();
-    if (selection.isEmpty()) return;
-    //Check if it is Node
-    GraphVisNode *item = qgraphicsitem_cast<GraphVisNode *>(selection.first());
-    if (!item) return;
-
-    for (int i = 0; i < 10; i++)
-    {
-        curItemPropModel->setData(QModelIndex(), item->data(i));
-    }
-//    QModelIndex index = model->index(item->filePath());
-//    ui->treeView->scrollTo(index);
-//    ui->treeView->setCurrentIndex(index);
-}
-
 QFileSystemModel *GraphScene::getFileModel() const
 {
     return fileModel;
@@ -59,16 +41,6 @@ void GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
     update();
 }
 
-QStandardItemModel *GraphScene::getCurItemPropModel() const
-{
-    return curItemPropModel;
-}
-
-void GraphScene::setCurItemPropModel(QStandardItemModel *value)
-{
-    curItemPropModel = value;
-}
-
 void GraphScene::addComment(GraphVisNode *node)
 {
     QGraphicsTextItem* comment = new QGraphicsTextItem("Type text here", node);
@@ -91,15 +63,5 @@ void GraphScene::addComment(GraphVisEdge *edge)
 
 void GraphScene::init()
 {
-    curItemPropModel = new QStandardItemModel(10, 1, this);
-    QStringList rows;
-    rows    << "Name"
-            << "Connections"
-            << "FileName"
-            << "Path"
-            << "Color"
-            << "X"
-            << "Y"
-            << "Comment";
-    curItemPropModel->setVerticalHeaderLabels(rows);
+
 }

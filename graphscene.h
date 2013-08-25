@@ -28,22 +28,16 @@ public:
 
     void init();
 
-
     QFileSystemModel *getFileModel() const;
     void setFileModel(QFileSystemModel *value);
 
-    QStandardItemModel *getCurItemPropModel() const;
-    void setCurItemPropModel(QStandardItemModel *value);
-
 private:
 
-    QStandardItemModel *curItemPropModel;
     QFileSystemModel *fileModel;
     GraphModel *graphModel;
 
 public slots:
 
-    void refreshItemProps();
 };
 
 #endif // GRAPHSCENE_H

@@ -21,7 +21,7 @@ public:
     void addOutEdge(GraphEdge *edge);
     void addInEdge(GraphEdge *edge);
 
-    bool connectedDirectlyTo(GraphNode *);
+    GraphEdge *connectedDirectlyTo(GraphNode *);
     int connections();
 
     void removeEdge(GraphEdge *edge);
@@ -40,15 +40,12 @@ public:
     void setId(int value);
 
 private:
-    QModelIndex fileIndex;
-    QFileSystemModel *fileModel;
-
     QFileInfo *fileInfo;
 
     QList<GraphEdge *> outEdges;
     QList<GraphEdge *> inEdges;
 
-    int id;
+    qint64 id;
 };
 
 Q_DECLARE_METATYPE(GraphNode *)

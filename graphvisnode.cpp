@@ -27,6 +27,7 @@ GraphVisNode::GraphVisNode(GraphNode *data, qreal x, qreal y, qreal w, qreal h, 
 
     nameText = new QGraphicsTextItem(data->name, this);
     nameText->setHtml("<div style='background-color:#FFFFFF;'>" + fn + "</div>");
+    mdata->name = fileInfo->fileName();
 
     QPointF thisPos(QPointF(boundingRect().width()/2 - nameText->boundingRect().width()/2, -25));
     nameText->setPos(thisPos);
@@ -100,7 +101,7 @@ QVariant GraphVisNode::itemChange(QGraphicsItem::GraphicsItemChange change, cons
     case ItemSelectedChange:
     {
 #ifdef QT_DEBUG
-        qDebug() << "changed selection of " << *this;
+        //qDebug() << "changed selection of " << *this;
 #endif //QT_DEBUG
         if (value == true)
         {
@@ -141,6 +142,7 @@ void GraphVisNode::eraseEdges()
 void GraphVisNode::removeEdge(GraphEdge *edge)
 {
     mdata->removeEdge(edge);
+    scene()->removeItem(edge->mdata);
 }
 
 
@@ -150,7 +152,7 @@ int GraphVisNode::connections()
 }
 
 
-bool GraphVisNode::connectedDirectlyTo(GraphNode *g)
+GraphEdge *GraphVisNode::connectedDirectlyTo(GraphNode *g)
 {
     return mdata->connectedDirectlyTo(g);
 }

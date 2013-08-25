@@ -29,7 +29,7 @@ public:
     void addOutEdge(GraphEdge *edge);
     void addInEdge(GraphEdge *edge);
 
-    bool connectedDirectlyTo(GraphNode *);
+    GraphEdge *connectedDirectlyTo(GraphNode *);
     int connections();
 
     void removeEdge(GraphEdge *edge);

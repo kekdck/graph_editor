@@ -9,6 +9,11 @@ class GraphModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    enum ItemDataRole {
+        SaveNodeRole = Qt::UserRole + 1,
+        SaveEdgeRole = Qt::UserRole + 2
+    };
+
     explicit GraphModel(QObject *parent = 0);
     
     QVariant data(const QModelIndex &index, int role) const;
@@ -30,7 +35,8 @@ public:
 private:
     QVector<GraphEdge *> edges;
     QVector<GraphNode *> nodes;
-    int next_id;
+    qint64 next_Nodeid;
+    qint64 next_Edgeid;
 
 public slots:
 };

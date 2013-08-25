@@ -23,6 +23,16 @@ GraphEdge::GraphEdge(GraphNode *source, GraphNode *destin)
     dest->addInEdge(this);
 }
 
+qint64 GraphEdge::getId() const
+{
+    return id;
+}
+
+void GraphEdge::setId(const qint64 &value)
+{
+    id = value;
+}
+
 GraphNode *GraphEdge::getDest() const
 {
     return dest;

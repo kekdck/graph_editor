@@ -20,10 +20,13 @@ public:
     GraphVisEdge *mdata;
 
     friend QDebug operator<<(QDebug d, GraphEdge &edge);
+    qint64 getId() const;
+    void setId(const qint64 &value);
+
 private:
     GraphNode *src;
     GraphNode *dest;
-
+    qint64 id;
 };
 
 Q_DECLARE_METATYPE(GraphEdge *)
