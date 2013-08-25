@@ -12,6 +12,7 @@
 #include <QDirModel>
 #include <QDebug>
 #include <QGraphicsItem>
+#include <QFileDialog>
 
 #include "graphnode.h"
 #include "graphedge.h"
@@ -22,6 +23,7 @@
 #include "graphmodel.h"
 #include "graphscene.h"
 
+#include "grmlsaver.h"
 
 namespace Ui {
 class MainWindow;
@@ -52,6 +54,8 @@ private slots:
 
     void loadSettings();
     void saveSettings();
+
+    void on_actionSave_triggered();
 
 private:
     Ui::MainWindow  *ui;

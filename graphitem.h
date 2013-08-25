@@ -13,6 +13,16 @@ struct GraphItem
     {
         return QVariant::fromValue(*this);
     }
+
+    QString getCommentText()
+    {
+        if(comment)
+        {
+            return comment->toPlainText();
+        }
+
+        return QString("");
+    }
 };
 Q_DECLARE_METATYPE(GraphItem)
 

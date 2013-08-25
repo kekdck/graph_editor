@@ -36,6 +36,9 @@ public:
 
     friend QDebug operator<< (QDebug d, GraphNode &node);
 
+    int getId() const;
+    void setId(int value);
+
 private:
     QModelIndex fileIndex;
     QFileSystemModel *fileModel;
@@ -44,6 +47,8 @@ private:
 
     QList<GraphEdge *> outEdges;
     QList<GraphEdge *> inEdges;
+
+    int id;
 };
 
 Q_DECLARE_METATYPE(GraphNode *)

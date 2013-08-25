@@ -3,10 +3,13 @@
 
 GraphEdge::GraphEdge()
 {
+    comment = NULL;
 }
 
 GraphEdge::GraphEdge(GraphNode *source, GraphNode *destin)
 {
+    comment = NULL;
+
     if (!source || !destin)
     {
         qDebug() << "Wrong node given to edge";

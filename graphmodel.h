@@ -20,14 +20,19 @@ public:
     GraphEdge *addEdge(GraphNode *, GraphNode *);
     GraphNode *addNode(QFileInfo *_fileinfo);
 
-signals:
+    QVector<GraphEdge *> getEdges() const;
+    void setEdges(const QVector<GraphEdge *> &value);
+
+    QVector<GraphNode *> getNodes() const;
+    void setNodes(const QVector<GraphNode *> &value);
+
 
 private:
     QVector<GraphEdge *> edges;
     QVector<GraphNode *> nodes;
-    
+    int next_id;
+
 public slots:
-    
 };
 
 #endif // GRAPHMODEL_H

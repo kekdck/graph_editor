@@ -2,12 +2,11 @@
 #include "graphvisedge.h"
 #include "graphnode.h"
 
-GraphVisEdge::GraphVisEdge(GraphEdge *_data, QGraphicsItem *parent)
+GraphVisEdge::GraphVisEdge(GraphEdge *_data, QGraphicsItem *parent):QGraphicsLineItem(parent)
 {
     mdata = _data;
     src = _data->getSrc()->mdata;
     dest = _data->getDest()->mdata;
-    QGraphicsLineItem::QGraphicsLineItem(parent);
     refreshGeometry();
     setFlags(QGraphicsItem::ItemIsSelectable
              | QGraphicsItem::ItemSendsGeometryChanges);

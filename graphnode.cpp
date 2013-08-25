@@ -3,10 +3,12 @@
 
 GraphNode::GraphNode()
 {
+    comment = NULL;
 }
 
 GraphNode::GraphNode(QFileInfo *_fileInfo) : fileInfo(_fileInfo)
 {
+    comment = NULL;
 }
 
 void GraphNode::eraseEdges()
@@ -101,4 +103,14 @@ void GraphNode::removeEdge(GraphEdge *edge)
 QList<GraphEdge *> GraphNode::getInEdges()
 {
     return inEdges;
+}
+
+int GraphNode::getId() const
+{
+    return id;
+}
+
+void GraphNode::setId(int value)
+{
+    id = value;
 }

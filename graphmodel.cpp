@@ -3,6 +3,7 @@
 GraphModel::GraphModel(QObject *parent) :
     QAbstractListModel(parent)
 {
+    next_id = 0;
 }
 
 GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
@@ -19,6 +20,8 @@ GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
 GraphNode *GraphModel::addNode(QFileInfo *_fileinfo)
 {
     GraphNode *node = new GraphNode(_fileinfo);
+    node->setId(next_id);
+    next_id++;
     nodes.push_back(node);
     return node;
 }
@@ -89,4 +92,24 @@ Qt::ItemFlags GraphModel::flags(const QModelIndex &index) const
     }
 
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+}
+
+QVector<GraphNode *> GraphModel::getNodes() const
+{
+    return nodes;
+}
+
+void GraphModel::setNodes(const QVector<GraphNode *> &value)
+{
+    nodes = value;
+}
+
+QVector<GraphEdge *> GraphModel::getEdges() const
+{
+    return edges;
+}
+
+void GraphModel::setEdges(const QVector<GraphEdge *> &value)
+{
+    edges = value;
 }

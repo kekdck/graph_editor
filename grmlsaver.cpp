@@ -47,17 +47,19 @@ XMLElement* GrmlSaver::addNode(GraphNode *node)
     nodeXML->SetAttribute("id", node->getId());
 
     XMLElement* pathData = doc->NewElement("data");
-    XMLElement* commentData = doc->NewElement("data");
 
     pathData->SetAttribute("id", "path");
 
     if (node->getCommentText() != QString(""))
     {
+        XMLElement* commentData = doc->NewElement("data");
+
         XMLText* commentText = doc->NewText(node->getCommentText().toStdString().c_str());
         commentText->SetCData(true); //For ignoring HTML marking
 
         commentData->SetAttribute("id", "comment");
         commentData->InsertFirstChild(commentText);
+
         nodeXML->InsertEndChild(commentData);
     }
 
@@ -75,12 +77,20 @@ XMLElement *GrmlSaver::addEdge(GraphEdge *edge)
     edgeXML->SetAttribute("source",edge->getSrc()->getId());
     edgeXML->SetAttribute("target",edge->getDest()->getId());
 
-    XMLElement* commentData = doc->NewElement("data");
-    XMLText* commentText = doc->NewText(edge->getCommentText().toStdString().c_str());
-    commentText->SetCData(true); //For ignoring HTML marking
-    commentData->InsertFirstChild(commentText);
+    if (edge->getCommentText() != QString(""))
+    {
+        XMLElement* commentData = doc->NewElement("data");
 
-    edgeXML->InsertEndChild(commentData);
+        XMLText* commentText = doc->NewText(edge->getCommentText().toStdString().c_str());
+        commentText->SetCData(true); //For ignoring HTML marking
+
+        commentData->SetAttribute("id", "comment");
+        commentData->InsertFirstChild(commentText);
+
+        edgeXML->InsertEndChild(commentData);
+    }
+
+
 
     graphBegin->InsertEndChild(edgeXML);
 }
