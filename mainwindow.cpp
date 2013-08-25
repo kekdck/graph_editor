@@ -11,9 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
     Fmodel = new QFileSystemModel(this);
     settings = new QSettings("OSLL", "SrcGraph", this);
     Gmodel = new GraphModel(this);
-    scene = new GraphScene(Gmodel,-1000, -1000, 2000, 2000, this);
+    scene = new GraphScene(Gmodel, -1000, -1000, 2000, 2000, this);
 
-    ui->propTreeView->setModel(scene->getCurItemPropModel());
+    ui->propTreeView->setModel(Gmodel);
     createMenus();
     loadSettings();
     ui->propTreeView->horizontalHeader()->hide();
@@ -38,9 +38,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     //Connecting actions
+    //calling edit window
+    connect(ui->pushEditButton, &QPushButton::clicked, ui->actionEdit, &QAction::trigger);
+    connect(ui->actionEdit, &QAction::triggered, ui->graphicsView, &GraphView::openEdit);
+    //add node
+    connect(ui->pushAddButton, &QPushButton::clicked, ui->actionAdd, &QAction::trigger);
+    //add comment
+    connect(ui->pushCommentButton, &QPushButton::clicked, ui->actionAddComment, &QAction::trigger);
+    //remove
+    connect(ui->pushRemoveButton, &QPushButton::clicked, ui->actionRemove, &QAction::trigger);
+    //connecting
+    connect(ui->pushConnectButton, &QPushButton::clicked, ui->actionConnect, &QAction::trigger);
+    //diconnecting
+    connect(ui->pushDisconnectButton, &QPushButton::clicked, ui->actionDisconnect, &QAction::trigger);
+    //clearing
     connect(ui->actionClear, &QAction::triggered, scene, &GraphScene::clear);
+    //quitting
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
-    connect(scene, &GraphScene::selectionChanged, scene, &GraphScene::refreshItemProps);
+    //Grid
+    connect(ui->actionGrid, &QAction::triggered, ui->gridCheckBox, &QCheckBox::setTristate);
+    connect(ui->gridCheckBox, &QCheckBox::stateChanged, ui->actionGrid, &QAction::trigger);
     //Zoom buttons
     connect(ui->actionZoomIn, &QAction::triggered, ui->graphicsView, &GraphView::zoomIn);
     connect(ui->actionZoomOut, &QAction::triggered, ui->graphicsView, &GraphView::zoomOut);
@@ -95,12 +112,54 @@ void MainWindow::saveSettings()
     settings->setValue("view/grid", QVariant(ui->gridCheckBox->isChecked()));
 }
 
+void MainWindow::on_actionSave_triggered()
+{
+
+}
+
 void MainWindow::mousePressEvent(QMouseEvent *)
 {
     //anything you want
 }
 
-void MainWindow::on_pushAddButton_clicked()
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Shift:
+        {
+            ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+        }break;
+    default:
+        {
+            //some default nn?
+        }break;
+    }
+    QMainWindow::keyPressEvent(e);
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Shift:
+        {
+            ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+        }break;
+    default:
+        {
+
+        }break;
+    }
+    QMainWindow::keyReleaseEvent(e);
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+    scene->clear();
+}
+
+void MainWindow::on_actionAdd_triggered()
 {
     //get selected item in treeView
     QModelIndex index = ui->treeView->currentIndex();
@@ -109,7 +168,7 @@ void MainWindow::on_pushAddButton_clicked()
     scene->addNode(new QFileInfo(Fmodel->fileInfo(index)));
 }
 
-void MainWindow::on_pushRemoveButton_clicked()
+void MainWindow::on_actionRemove_triggered()
 {
     if (scene->items().isEmpty()) return;
     QList <QGraphicsItem *> items = scene->selectedItems();
@@ -126,62 +185,51 @@ void MainWindow::on_pushRemoveButton_clicked()
     scene->update();
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *e)
+void MainWindow::on_actionConnect_triggered()
 {
-    switch(e->key())
+    QList<QGraphicsItem *> items =  scene->selectedItems();
+    QList<GraphVisNode *> gvns;
+    foreach (QGraphicsItem *it, items)
     {
-    case Qt::Key_Shift:
+        GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(it);
+        if (gvn)
         {
-            ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
-        }break;
-    default:
-        {
-            //some default nn?
-        }break;
+            gvns.push_back(gvn);
+        }
     }
-    QMainWindow::keyPressEvent(e);
-}
 
-void MainWindow::keyReleaseEvent(QKeyEvent *e)
-{
-    switch(e->key())
+    if (gvns.length() == 2)
     {
-    case Qt::Key_Shift:
+        if (!gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata))
         {
-            ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-        }break;
-    default:
-        {
-
-        }break;
-    }
-    QMainWindow::keyReleaseEvent(e);
-}
-
-void MainWindow::on_actionNew_triggered()
-{
-    scene->clear();
-}
-
-void MainWindow::on_pushConnectButton_clicked()
-{
-    QList<QGraphicsItem* > items =  scene->selectedItems();
-    if (items.length() == 2)
-    {
-        GraphVisNode *firstItem = dynamic_cast<GraphVisNode *>(items.at(0));
-        GraphVisNode *lastItem  = dynamic_cast<GraphVisNode *>(items.at(1));
-
-        qDebug() << firstItem << lastItem;
-        if (firstItem && lastItem)
-        {
-            scene->addEdge(firstItem, lastItem);
+            scene->addEdge(gvns.at(0), gvns.at(1));
         }
     }
     scene->clearSelection();
     scene->update();
 }
 
-void MainWindow::on_gridCheckBox_stateChanged(int arg1)
+void MainWindow::on_actionAddComment_triggered()
+{
+    QList<QGraphicsItem* > items =  scene->selectedItems();
+
+    if(items.length() == 1)
+    {
+        GraphVisEdge *edge = dynamic_cast<GraphVisEdge *>(items.at(0));
+        if (edge && edge->mdata->comment == 0)
+        {
+            scene->addComment(edge);
+            return;
+        }
+        GraphVisNode *node = dynamic_cast<GraphVisNode *>(items.at(0));
+        if (node && node->mdata->comment == 0)
+        {
+            scene->addComment(node);
+            return;
+        }
+    }
+}
+void MainWindow::on_actionGrid_toggled(bool arg1)
 {
     if (arg1)
     {
@@ -196,33 +244,30 @@ void MainWindow::on_gridCheckBox_stateChanged(int arg1)
     scene->update();
 }
 
-void MainWindow::on_pushCommentButton_clicked()
+void MainWindow::on_actionDisconnect_triggered()
 {
-    QList<QGraphicsItem* > items =  scene->selectedItems();
-
-    if(items.length() == 1 && items.first()->childItems().count() < 2)
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    QList<GraphVisNode *> gvns;
+    foreach (QGraphicsItem *it, items)
     {
-        GraphVisEdge *edge = dynamic_cast<GraphVisEdge *>(items.at(0));
-        if (edge)
+        GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(it);
+        if (gvn)
         {
-            scene->addComment(edge);
-            return;
-        }
-        GraphVisNode *node = dynamic_cast<GraphVisNode *>(items.at(0));
-        if (node)
-        {
-            scene->addComment(node);
-            return;
+            gvns.push_back(gvn);
         }
     }
-}
-
-
-
-void MainWindow::on_actionSave_triggered()
-{
-    QString fileName = QFileDialog::getSaveFileName(this);
-
-    GrmlSaver saver;
-    saver.save(Gmodel, fileName);
+    switch (gvns.size())
+    {
+    case 0:
+        return;
+    case 1:
+        gvns.at(0)->eraseEdges();
+        break;
+    case 2:
+        GraphEdge *e = gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata);
+        if (e)
+            gvns.at(0)->removeEdge(e);
+        break;
+    }
+    scene->clearSelection();
 }

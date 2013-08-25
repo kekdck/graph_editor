@@ -13,7 +13,7 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-SOURCES += main.cpp\
+SOURCES += main.cpp \
         mainwindow.cpp \
     graphscene.cpp \
     graphedge.cpp \
@@ -21,8 +21,7 @@ SOURCES += main.cpp\
     graphview.cpp \
     graphmodel.cpp \
     graphvisedge.cpp \
-    graphvisnode.cpp \
-    grmlsaver.cpp
+    graphvisnode.cpp
 
 HEADERS  += mainwindow.h \
     graphscene.h \
@@ -32,8 +31,7 @@ HEADERS  += mainwindow.h \
     graphmodel.h \
     graphitem.h \
     graphvisedge.h \
-    graphvisnode.h \
-    grmlsaver.h
+    graphvisnode.h
 
 FORMS    += mainwindow.ui
 

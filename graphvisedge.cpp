@@ -2,7 +2,8 @@
 #include "graphvisedge.h"
 #include "graphnode.h"
 
-GraphVisEdge::GraphVisEdge(GraphEdge *_data, QGraphicsItem *parent):QGraphicsLineItem(parent)
+GraphVisEdge::GraphVisEdge(GraphEdge *_data, QGraphicsItem *parent) :
+    QGraphicsLineItem(parent)
 {
     mdata = _data;
     src = _data->getSrc()->mdata;
@@ -27,11 +28,11 @@ void GraphVisEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 QVariant GraphVisEdge::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
-    qDebug() << "Change" << *this;
+    //qDebug() << "Change" << *this;
     switch (change)
     {
     case QGraphicsItem::ItemSelectedChange:
-        qDebug() << "Selection change!!!";
+        //qDebug() << "Selection change!!!";
         QPen p = pen();
         QBrush b = p.brush();
         if (value == true)
@@ -64,7 +65,7 @@ void GraphVisEdge::refreshGeometry()
     setX( posX );
     setY( posY );
     setLine( QLineF(begin, end) );
-    qDebug() << "Src: " << src->pos() << ", Dest: " << dest->pos() << ", LINE: " << line();
+    //qDebug() << "Src: " << src->pos() << ", Dest: " << dest->pos() << ", LINE: " << line();
 }
 
 QRectF GraphVisEdge::boundingRect() const
