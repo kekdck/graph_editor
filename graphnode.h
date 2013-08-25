@@ -14,6 +14,7 @@ class GraphNode: public GraphItem
 public:
     explicit GraphNode(QFileInfo *_fileInfo);
     GraphNode();
+    virtual ~GraphNode();
 
     QString fileName();
     QString filePath();

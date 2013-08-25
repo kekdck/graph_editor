@@ -3,8 +3,7 @@
 #include "graphedge.h"
 
 GraphVisNode::GraphVisNode(GraphNode *data, qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent) :
-    QGraphicsRectItem(x, y, w, h, parent), mdata(data), fileInfo(data->getFileInfo()),
-    comment(data->comment)
+    QGraphicsRectItem(x, y, w, h, parent), mdata(data), fileInfo(data->getFileInfo())
 {
     setFlags(QGraphicsItem::ItemIsMovable
              | QGraphicsItem::ItemIsSelectable
@@ -31,6 +30,11 @@ GraphVisNode::GraphVisNode(GraphNode *data, qreal x, qreal y, qreal w, qreal h, 
 
     QPointF thisPos(QPointF(boundingRect().width()/2 - nameText->boundingRect().width()/2, -25));
     nameText->setPos(thisPos);
+}
+
+GraphVisNode::~GraphVisNode()
+{
+    scene()->removeItem(nameText);
 }
 
 void GraphVisNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -142,7 +146,6 @@ void GraphVisNode::eraseEdges()
 void GraphVisNode::removeEdge(GraphEdge *edge)
 {
     mdata->removeEdge(edge);
-    scene()->removeItem(edge->mdata);
 }
 
 

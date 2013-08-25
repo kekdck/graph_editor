@@ -16,6 +16,7 @@ class GraphVisNode : public QGraphicsRectItem
 public:
     enum { Type = UserType + 1 };
     GraphVisNode(GraphNode *data, qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = 0);
+    virtual ~GraphVisNode();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     //Selection events
@@ -40,7 +41,6 @@ public:
     GraphNode *mdata;
 private:
 
-    QTextDocument *comment;
     QGraphicsTextItem *nameText;
 
     QFileInfo *fileInfo;

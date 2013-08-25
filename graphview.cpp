@@ -5,6 +5,11 @@ GraphView::GraphView(QWidget *parent) :
 {
 }
 
+GraphView::~GraphView()
+{
+    delete contextMenu;
+}
+
 void GraphView::openEdit()
 {
 

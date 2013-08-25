@@ -13,12 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
     Gmodel = new GraphModel(this);
     scene = new GraphScene(Gmodel, -1000, -1000, 2000, 2000, this);
 
-    ui->propTreeView->setModel(Gmodel);
+    ui->listView->setModel(Gmodel);
     createMenus();
     loadSettings();
-    ui->propTreeView->horizontalHeader()->hide();
 
-    //Setup model and treeView
+    //Setup model and listView
     Fmodel->setRootPath("");
     ui->treeView->setModel(Fmodel);
 
@@ -55,9 +54,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionClear, &QAction::triggered, scene, &GraphScene::clear);
     //quitting
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
-    //Grid
-    connect(ui->actionGrid, &QAction::triggered, ui->gridCheckBox, &QCheckBox::setTristate);
-    connect(ui->gridCheckBox, &QCheckBox::stateChanged, ui->actionGrid, &QAction::trigger);
     //Zoom buttons
     connect(ui->actionZoomIn, &QAction::triggered, ui->graphicsView, &GraphView::zoomIn);
     connect(ui->actionZoomOut, &QAction::triggered, ui->graphicsView, &GraphView::zoomOut);
@@ -71,6 +67,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     saveSettings();
+    delete settings;
+    delete Gmodel;
+    delete Fmodel;
+    delete scene;
     delete ui;
 }
 
@@ -84,17 +84,17 @@ void MainWindow::createMenus()
 void MainWindow::loadSettings()
 {
     //Setting grid
-    if (settings->value("view/grid") == QVariant())
+    if (settings->value("view/grid").toBool())
     {
-        ui->gridCheckBox->setChecked(true);
+        ui->actionGrid->setChecked(true);
     }
     else
     {
-        ui->gridCheckBox->setChecked(false);
+        ui->actionGrid->setChecked(false);
     }
 
     //Check if it is the first run
-    if (settings->value("firstrun") == QVariant())
+    if (settings->value("firstrun").toBool())
     {
         QMessageBox::information(this,
                                  "First run",
@@ -109,7 +109,7 @@ void MainWindow::loadSettings()
 
 void MainWindow::saveSettings()
 {
-    settings->setValue("view/grid", QVariant(ui->gridCheckBox->isChecked()));
+    //Save any settings you want if they were not set in setProperty()
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -171,15 +171,37 @@ void MainWindow::on_actionAdd_triggered()
 void MainWindow::on_actionRemove_triggered()
 {
     if (scene->items().isEmpty()) return;
-    QList <QGraphicsItem *> items = scene->selectedItems();
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    QList<GraphNode *> gvns;
+    QList<GraphEdge *> gves;
+    //Get only nodes
     foreach(QGraphicsItem *item, items)
     {
         GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(item);
         if (gvn)
         {
-            gvn->eraseEdges();
-            scene->removeItem(gvn);
+            gvns.push_back(gvn->mdata);
         }
+    }
+    //delete these nodes
+    foreach(GraphNode *n, gvns)
+    {
+        Gmodel->removeNode(n);
+    }
+    //refresh selection and get left edges
+    items = scene->selectedItems();
+    foreach(QGraphicsItem *item, items)
+    {
+        GraphVisEdge *gve = dynamic_cast<GraphVisEdge *>(item);
+        if (gve)
+        {
+            gves.push_back(gve->mdata);
+        }
+    }
+    //delete these edges
+    foreach(GraphEdge *e, gves)
+    {
+        Gmodel->removeEdge(e);
     }
     scene->clearSelection();
     scene->update();
@@ -229,20 +251,6 @@ void MainWindow::on_actionAddComment_triggered()
         }
     }
 }
-void MainWindow::on_actionGrid_toggled(bool arg1)
-{
-    if (arg1)
-    {
-        scene->setBackgroundBrush(QBrush(QColor(150,150,150), Qt::CrossPattern));
-        setProperty("Grid", QVariant(true));
-    }
-    else
-    {
-        scene->setBackgroundBrush(QBrush(QColor(255,255,255)));
-        setProperty("Grid", QVariant(false));
-    }
-    scene->update();
-}
 
 void MainWindow::on_actionDisconnect_triggered()
 {
@@ -261,13 +269,26 @@ void MainWindow::on_actionDisconnect_triggered()
     case 0:
         return;
     case 1:
-        gvns.at(0)->eraseEdges();
+        Gmodel->eraseEdges(gvns.at(0)->mdata);
         break;
     case 2:
         GraphEdge *e = gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata);
-        if (e)
-            gvns.at(0)->removeEdge(e);
+        Gmodel->removeEdge(e);
         break;
     }
     scene->clearSelection();
+}
+
+void MainWindow::on_actionGrid_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        scene->setBackgroundBrush(QBrush(QColor(150,150,150), Qt::CrossPattern));
+    }
+    else
+    {
+        scene->setBackgroundBrush(QBrush(QColor(255,255,255)));
+    }
+    setProperty("view/grid", QVariant::fromValue(arg1));
+    scene->update();
 }

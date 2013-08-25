@@ -15,6 +15,7 @@ public:
     };
 
     explicit GraphModel(QObject *parent = 0);
+    virtual ~GraphModel();
     
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
@@ -22,8 +23,13 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    void eraseEdges(GraphNode *);
+
     GraphEdge *addEdge(GraphNode *, GraphNode *);
     GraphNode *addNode(QFileInfo *_fileinfo);
+
+    void removeEdge(GraphEdge *);
+    void removeNode(GraphNode *);
 
     QVector<GraphEdge *> getEdges() const;
     void setEdges(const QVector<GraphEdge *> &value);
@@ -35,8 +41,6 @@ public:
 private:
     QVector<GraphEdge *> edges;
     QVector<GraphNode *> nodes;
-    qint64 next_Nodeid;
-    qint64 next_Edgeid;
 
 public slots:
 };

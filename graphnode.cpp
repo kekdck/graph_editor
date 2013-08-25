@@ -6,25 +6,40 @@ GraphNode::GraphNode()
     comment = NULL;
 }
 
+GraphNode::~GraphNode()
+{
+    foreach(GraphEdge *e, inEdges)
+    {
+        e->getSrc()->removeEdge(e);
+        delete e;
+    }
+    foreach(GraphEdge *e, outEdges)
+    {
+        e->getDest()->removeEdge(e);
+        delete e;
+    }
+    delete fileInfo;
+    delete mdata;
+}
+
 GraphNode::GraphNode(QFileInfo *_fileInfo) : fileInfo(_fileInfo)
 {
     comment = NULL;
+    name = _fileInfo->fileName();
 }
 
 void GraphNode::eraseEdges()
 {
-    foreach(GraphEdge *edge, inEdges)
+    foreach(GraphEdge *e, inEdges)
     {
-        mdata->scene()->removeItem(edge->mdata);
-        edge->getSrc()->removeEdge(edge);
+        e->getSrc()->removeEdge(e);
     }
-    inEdges.erase(inEdges.begin(), inEdges.end());
-    foreach(GraphEdge *edge, outEdges)
+    qDeleteAll(inEdges);
+    foreach(GraphEdge *e, outEdges)
     {
-        mdata->scene()->removeItem(edge->mdata);
-        edge->getDest()->removeEdge(edge);
+        e->getDest()->removeEdge(e);
     }
-    outEdges.erase(outEdges.begin(), outEdges.end());
+    qDeleteAll(outEdges);
 }
 
 QList<GraphEdge *> GraphNode::getOutEdges()
@@ -95,15 +110,9 @@ int GraphNode::connections()
 
 void GraphNode::removeEdge(GraphEdge *edge)
 {
-    if (!inEdges.removeOne(edge))
-    {
-        outEdges.removeOne(edge);
-    }
-    else
-    {
-    }
+    inEdges.removeOne(edge);
+    outEdges.removeOne(edge);
 }
-
 
 QList<GraphEdge *> GraphNode::getInEdges()
 {

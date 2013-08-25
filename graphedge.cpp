@@ -6,6 +6,11 @@ GraphEdge::GraphEdge()
     comment = NULL;
 }
 
+GraphEdge::~GraphEdge()
+{
+    delete mdata;
+}
+
 GraphEdge::GraphEdge(GraphNode *source, GraphNode *destin)
 {
     comment = NULL;

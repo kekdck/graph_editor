@@ -3,8 +3,14 @@
 GraphModel::GraphModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    next_Nodeid = 0;
-    next_Edgeid = 0;
+}
+
+GraphModel::~GraphModel()
+{
+    if (!edges.isEmpty())
+        qDeleteAll(edges);
+    if (!nodes.isEmpty())
+        qDeleteAll(nodes);
 }
 
 GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
@@ -14,8 +20,6 @@ GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
         return 0; //Nodes are already connected by some edge
     }
     GraphEdge *edge = new GraphEdge(src, dest);
-    edge->setId(next_Edgeid);
-    next_Edgeid++;
     edges.push_back(edge);
     return edge;
 }
@@ -23,10 +27,26 @@ GraphEdge *GraphModel::addEdge(GraphNode *src, GraphNode *dest)
 GraphNode *GraphModel::addNode(QFileInfo *_fileinfo)
 {
     GraphNode *node = new GraphNode(_fileinfo);
-    node->setId(next_Nodeid);
-    next_Nodeid++;
     nodes.push_back(node);
+    emit dataChanged( index(nodes.size() - 1), index(nodes.size() - 1) );
     return node;
+}
+
+void GraphModel::removeEdge(GraphEdge *e)
+{
+    int i = edges.indexOf(e);
+    e->getDest()->removeEdge(e);
+    e->getSrc()->removeEdge(e);
+    delete edges.at(i);
+    edges.remove(i);
+}
+
+void GraphModel::removeNode(GraphNode *n)
+{
+    int i = nodes.indexOf(n);
+    delete nodes.at(i);
+    nodes.remove(i);
+    emit dataChanged( index(i - 1), index(nodes.size()) );
 }
 
 int GraphModel::rowCount(const QModelIndex &parent) const
@@ -51,6 +71,7 @@ bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int ro
         {
             edges.replace(index.row(), e);
         }
+        emit dataChanged(index, index);
     }
     return false;
 }
@@ -70,7 +91,7 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const
     switch (role)
     {
     case Qt::DisplayRole:
-        return QVariant::fromValue(nodes.at(index.row())->name);
+        return QVariant(nodes.at(index.row())->name).toString();
     case SaveNodeRole:
         return QVariant::fromValue(nodes.at(index.row()));
     case SaveEdgeRole:
@@ -99,6 +120,24 @@ Qt::ItemFlags GraphModel::flags(const QModelIndex &index) const
     }
 
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+}
+
+void GraphModel::eraseEdges(GraphNode *n)
+{
+    foreach(GraphEdge *e, n->getInEdges())
+    {
+        e->getSrc()->removeEdge(e);
+        delete e;
+        n->removeEdge(e);
+        edges.remove(edges.indexOf(e));
+    }
+    foreach(GraphEdge *e, n->getOutEdges())
+    {
+        e->getDest()->removeEdge(e);
+        delete e;
+        n->removeEdge(e);
+        edges.remove(edges.indexOf(e));
+    }
 }
 
 QVector<GraphNode *> GraphModel::getNodes() const

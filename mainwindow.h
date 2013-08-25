@@ -36,7 +36,7 @@ public:
     virtual void    keyPressEvent(QKeyEvent *);
     virtual void    keyReleaseEvent(QKeyEvent *);
     virtual void    mousePressEvent(QMouseEvent *);
-    ~MainWindow();
+    virtual ~MainWindow();
 
     void createMenus();
 
@@ -57,9 +57,9 @@ private slots:
 
     void on_actionAddComment_triggered();
 
-    void on_actionGrid_toggled(bool arg1);
-
     void on_actionDisconnect_triggered();
+
+    void on_actionGrid_toggled(bool arg1);
 
 private:
     Ui::MainWindow  *ui;

@@ -10,7 +10,7 @@ class GraphView : public QGraphicsView
     Q_OBJECT
 public:
     explicit GraphView(QWidget * parent = 0);
-
+    virtual ~GraphView();
 
     QMenu *getContextMenu() const;
     void setContextMenu(QMenu *value);

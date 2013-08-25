@@ -10,6 +10,7 @@ class GraphEdge: public GraphItem
 public:
     explicit GraphEdge(GraphNode *source, GraphNode *destin);
     GraphEdge();
+    virtual ~GraphEdge();
 
     GraphNode *getSrc() const;
     void setSrc(GraphNode *value);
