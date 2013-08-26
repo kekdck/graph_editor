@@ -21,15 +21,19 @@ public:
     explicit GraphScene(QObject *parent = 0);
     GraphScene(GraphModel *mod, qreal x, qreal y, qreal width, qreal height, QObject *parent = 0);
 
-    void addNode(QFileInfo *_fileinfo);
-    void addEdge(GraphVisNode* source, GraphVisNode* destin);
-    void addComment(GraphVisNode* node);
-    void addComment(GraphVisEdge *edge);
+    GraphVisNode *addNode(QFileInfo *_fileinfo);
+    GraphVisEdge *addEdge(GraphVisNode* source, GraphVisNode* destin);
+
+    void addComment(GraphVisNode* node, QString commentText = "type comment here");
+    void addComment(GraphVisEdge *edge, QString commentText = "type comment here");
 
     void init();
 
     QFileSystemModel *getFileModel() const;
     void setFileModel(QFileSystemModel *value);
+
+    GraphModel *getGraphModel() const;
+    void setGraphModel(GraphModel *value);
 
 private:
 

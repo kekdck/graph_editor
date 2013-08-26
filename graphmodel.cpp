@@ -29,12 +29,14 @@ GraphNode *GraphModel::addNode(QFileInfo *_fileinfo)
     GraphNode *node = new GraphNode(_fileinfo);
     nodes.push_back(node);
     emit dataChanged( index(nodes.size() - 1), index(nodes.size() - 1) );
+    node->setId(nodes.indexOf(node));
     return node;
 }
 
 void GraphModel::removeEdge(GraphEdge *e)
 {
     int i = edges.indexOf(e);
+    Q_ASSERT(i > 0 && i < edges.size());
     e->getDest()->removeEdge(e);
     e->getSrc()->removeEdge(e);
     delete edges.at(i);
@@ -46,7 +48,12 @@ void GraphModel::removeNode(GraphNode *n)
     int i = nodes.indexOf(n);
     delete nodes.at(i);
     nodes.remove(i);
-    emit dataChanged( index(i - 1), index(nodes.size()) );
+    emit dataChanged(index(i - 1), index(nodes.size()) );
+
+    foreach(GraphNode *node, nodes)
+    {
+        node->setId(nodes.indexOf(node));
+    }
 }
 
 int GraphModel::rowCount(const QModelIndex &parent) const

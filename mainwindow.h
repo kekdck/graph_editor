@@ -23,6 +23,9 @@
 #include "graphmodel.h"
 #include "graphscene.h"
 
+#include "graphmlloader.h"
+#include "graphmlsaver.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -60,6 +63,10 @@ private slots:
     void on_actionDisconnect_triggered();
 
     void on_actionGrid_toggled(bool arg1);
+
+    void on_actionOpen_triggered();
+
+    void on_pushDisconnectButton_clicked();
 
 private:
     Ui::MainWindow  *ui;

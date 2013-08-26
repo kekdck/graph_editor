@@ -21,7 +21,10 @@ SOURCES += main.cpp \
     graphview.cpp \
     graphmodel.cpp \
     graphvisedge.cpp \
-    graphvisnode.cpp
+    graphvisnode.cpp \
+    graphmlloader.cpp \
+    graphmlsaver.cpp
+
 
 HEADERS  += mainwindow.h \
     graphscene.h \
@@ -31,7 +34,9 @@ HEADERS  += mainwindow.h \
     graphmodel.h \
     graphitem.h \
     graphvisedge.h \
-    graphvisnode.h
+    graphvisnode.h \
+    graphmlloader.h \
+    graphmlsaver.h
 
 FORMS    += mainwindow.ui
 

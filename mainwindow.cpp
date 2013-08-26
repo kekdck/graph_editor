@@ -114,7 +114,15 @@ void MainWindow::saveSettings()
 
 void MainWindow::on_actionSave_triggered()
 {
+    QString fileName = QFileDialog::getSaveFileName(this);
 
+    if(fileName == QString(""))
+    {
+        return;
+    }
+
+    GraphMlSaver saver(fileName);
+    saver.save(Gmodel);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *)
@@ -273,7 +281,7 @@ void MainWindow::on_actionDisconnect_triggered()
         break;
     case 2:
         GraphEdge *e = gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata);
-        Gmodel->removeEdge(e);
+        scene->getGraphModel()->removeEdge(e);
         break;
     }
     scene->clearSelection();
@@ -291,4 +299,24 @@ void MainWindow::on_actionGrid_toggled(bool arg1)
     }
     setProperty("view/grid", QVariant::fromValue(arg1));
     scene->update();
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this);
+
+    if(fileName == QString(""))
+    {
+        return;
+    }
+
+    GraphMlLoader loader(fileName);
+    scene = loader.getGraph();
+    Gmodel = scene->getGraphModel();
+    ui->graphicsView->setScene(scene);
+}
+
+void MainWindow::on_pushDisconnectButton_clicked()
+{
+
 }

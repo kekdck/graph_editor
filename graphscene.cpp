@@ -22,16 +22,18 @@ void GraphScene::setFileModel(QFileSystemModel *value)
     fileModel = value;
 }
 
-void GraphScene::addNode(QFileInfo *_fileinfo)
+GraphVisNode *GraphScene::addNode(QFileInfo *_fileinfo)
 {
     GraphNode *node = graphModel->addNode(_fileinfo);
     GraphVisNode *visNode = new GraphVisNode(node, 0, 0, 20, 20);
 
     node->mdata = visNode;
     addItem(visNode);
+
+    return visNode;
 }
 
-void GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
+GraphVisEdge *GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
 {
     GraphEdge *edge = graphModel->addEdge(source->mdata, destin->mdata);
     GraphVisEdge *visEdge = new GraphVisEdge(edge);
@@ -39,11 +41,13 @@ void GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
     edge->mdata = visEdge;
     addItem(visEdge);
     update();
+
+    return visEdge;
 }
 
-void GraphScene::addComment(GraphVisNode *node)
+void GraphScene::addComment(GraphVisNode *node, QString commentText)
 {
-    QGraphicsTextItem* comment = new QGraphicsTextItem("Type text here", node);
+    QGraphicsTextItem* comment = new QGraphicsTextItem(commentText, node);
     node->mdata->comment = comment->document();
     comment->setPos(node->boundingRect().center().x() + 30,
                     node->boundingRect().center().y() + 30);
@@ -52,9 +56,9 @@ void GraphScene::addComment(GraphVisNode *node)
     //Item is already added when created by passing parent
 }
 
-void GraphScene::addComment(GraphVisEdge *edge)
+void GraphScene::addComment(GraphVisEdge *edge, QString commentText)
 {
-    QGraphicsTextItem* comment = new QGraphicsTextItem("Type text here", edge);
+    QGraphicsTextItem* comment = new QGraphicsTextItem(commentText, edge);
     edge->mdata->comment = comment->document();
     comment->setPos(edge->boundingRect().center().x() + 10,
                     edge->boundingRect().center().y() + 15);
@@ -64,4 +68,14 @@ void GraphScene::addComment(GraphVisEdge *edge)
 void GraphScene::init()
 {
 
+}
+
+GraphModel *GraphScene::getGraphModel() const
+{
+    return graphModel;
+}
+
+void GraphScene::setGraphModel(GraphModel *value)
+{
+    graphModel = value;
 }
