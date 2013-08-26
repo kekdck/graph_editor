@@ -8,7 +8,7 @@ GraphMlLoader::GraphMlLoader(const QString filePath)
 
 
     Gmodel = new GraphModel();
-    graph = new GraphScene(Gmodel,-1000, -1000, 2000, 2000, 0);
+    graph = new GraphScene(Gmodel, -1000, -1000, 2000, 2000, 0);
 
     reader.setDevice(file);
 }
@@ -17,6 +17,7 @@ void GraphMlLoader::getNode()
 {        
     QString path = "";
     QString comment = "";
+    QPointF pos(0,0), compos(0,0);
     
     while(!(reader.tokenType() == QXmlStreamReader::EndElement && reader.name() == "node"))
     {
@@ -25,16 +26,23 @@ void GraphMlLoader::getNode()
 
             QXmlStreamAttributes attributes = reader.attributes();
 
-            reader.readNext();//Переходим к содержимому
+            reader.readNext();//go to data
 
-            if (attributes.value("id").toString() == "path")
+            if(attributes.value("id").toString() == "path")
             {
-
                 path = reader.text().toString();
             }
             if(attributes.value("id").toString() == "comment")
             {
                 comment = reader.text().toString();
+                if(attributes.value("id").toString() == "x")
+                {
+                    pos.setX(reader.text().toString().toDouble());
+                }
+                if(attributes.value("id").toString() == "y")
+                {
+                    pos.setY(reader.text().toString().toDouble());
+                }
             }
         }
         reader.readNext();
@@ -46,16 +54,18 @@ void GraphMlLoader::getNode()
     QFileInfo *fileInfo = new QFileInfo(path);
     
     GraphVisNode* node = graph->addNode(fileInfo);
+    node->setPos(pos);
 
     if(comment != "")
     {
-        graph->addComment(node, comment);
+        graph->addComment(node, comment, compos);
     }
 }
 
 void GraphMlLoader::getEdge()
 {
     QString comment = "";
+    QPointF pos(0,0), compos(0,0);
 
     int target_id = 0;
     int source_id = 0;
@@ -78,6 +88,14 @@ void GraphMlLoader::getEdge()
             if(attributes.value("id").toString() == "comment")
             {
                 comment = reader.text().toString();
+                if(attributes.value("id").toString() == "x")
+                {
+                    pos.setX(reader.text().toString().toDouble());
+                }
+                if(attributes.value("id").toString() == "y")
+                {
+                    pos.setY(reader.text().toString().toDouble());
+                }
             }
         }
 
@@ -92,9 +110,12 @@ void GraphMlLoader::getEdge()
     {
         qDebug() << "edge added";
         GraphVisEdge *edge = graph->addEdge(source_node, target_node);
+        edge->setPos(pos);
 
-        if(comment!="");
-            graph->addComment(edge, comment);
+        if(comment != "")
+        {
+            graph->addComment(edge, comment, compos);
+        }
     }
 
 }
@@ -108,11 +129,12 @@ GraphScene *GraphMlLoader::getGraph()
     {
         QXmlStreamReader::TokenType token = reader.readNext(); 
         
-        if(token == QXmlStreamReader::StartDocument){
+        if(token == QXmlStreamReader::StartDocument)
+        {
             continue;
         }
         
-        if (token == QXmlStreamReader::StartElement)
+        if(token == QXmlStreamReader::StartElement)
         {
             if(reader.name() == "key" || reader.name() == "graph")
             {

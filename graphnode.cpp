@@ -8,6 +8,7 @@ GraphNode::GraphNode()
 
 GraphNode::~GraphNode()
 {
+    qDebug() << "Deleting > " << *this;
     foreach(GraphEdge *e, inEdges)
     {
         e->getSrc()->removeEdge(e);
@@ -59,8 +60,9 @@ void GraphNode::setFileInfo(QFileInfo *value)
 
 QDebug operator<<(QDebug d, GraphNode &node)
 {
-    d << "Name: " << node.name << ", comment: " << node.comment->toPlainText() << ", connections: "
-         << node.connections();
+    d << "Name: " << node.name
+      //<< ", comment: " << node.comment->toPlainText()
+      << ", connections: " << node.connections();
     return d;
 }
 
@@ -110,8 +112,8 @@ int GraphNode::connections()
 
 void GraphNode::removeEdge(GraphEdge *edge)
 {
-    inEdges.removeOne(edge);
-    outEdges.removeOne(edge);
+    if (!inEdges.removeOne(edge))
+        outEdges.removeOne(edge);
 }
 
 QList<GraphEdge *> GraphNode::getInEdges()

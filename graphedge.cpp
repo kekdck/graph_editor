@@ -8,6 +8,7 @@ GraphEdge::GraphEdge()
 
 GraphEdge::~GraphEdge()
 {
+    qDebug() << "Deleting > " << *this;
     delete mdata;
 }
 

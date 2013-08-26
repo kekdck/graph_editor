@@ -281,7 +281,8 @@ void MainWindow::on_actionDisconnect_triggered()
         break;
     case 2:
         GraphEdge *e = gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata);
-        scene->getGraphModel()->removeEdge(e);
+        if (e)
+            Gmodel->removeEdge(e);
         break;
     }
     scene->clearSelection();
@@ -303,20 +304,17 @@ void MainWindow::on_actionGrid_toggled(bool arg1)
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this);
+    delete Gmodel;
+    delete scene;
+    QString filePath = QFileDialog::getOpenFileName(this);
 
-    if(fileName == QString(""))
+    if(filePath == QString(""))
     {
         return;
     }
 
-    GraphMlLoader loader(fileName);
+    GraphMlLoader loader(filePath);
     scene = loader.getGraph();
     Gmodel = scene->getGraphModel();
     ui->graphicsView->setScene(scene);
-}
-
-void MainWindow::on_pushDisconnectButton_clicked()
-{
-
 }

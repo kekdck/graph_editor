@@ -7,8 +7,8 @@ GraphModel::GraphModel(QObject *parent) :
 
 GraphModel::~GraphModel()
 {
-    if (!edges.isEmpty())
-        qDeleteAll(edges);
+    //Edges are deleted while going through nodes list
+    //as they each delete edges connected to themselves
     if (!nodes.isEmpty())
         qDeleteAll(nodes);
 }
@@ -36,7 +36,8 @@ GraphNode *GraphModel::addNode(QFileInfo *_fileinfo)
 void GraphModel::removeEdge(GraphEdge *e)
 {
     int i = edges.indexOf(e);
-    Q_ASSERT(i > 0 && i < edges.size());
+    if (i < 0 || i > edges.size())
+        return;
     e->getDest()->removeEdge(e);
     e->getSrc()->removeEdge(e);
     delete edges.at(i);

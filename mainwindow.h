@@ -66,8 +66,6 @@ private slots:
 
     void on_actionOpen_triggered();
 
-    void on_pushDisconnectButton_clicked();
-
 private:
     Ui::MainWindow  *ui;
     QSettings       *settings;
