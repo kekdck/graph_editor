@@ -24,8 +24,8 @@ public:
     GraphVisNode *addNode(QFileInfo *_fileinfo);
     GraphVisEdge *addEdge(GraphVisNode* source, GraphVisNode* destin);
 
-    void addComment(GraphVisNode* node, QString commentText = "type comment here");
-    void addComment(GraphVisEdge *edge, QString commentText = "type comment here");
+    void addComment(GraphVisNode* node, QString commentText = "type comment here", QPointF pos = QPointF(0,0));
+    void addComment(GraphVisEdge *edge, QString commentText = "type comment here", QPointF pos = QPointF(0,0));
 
     void init();
 

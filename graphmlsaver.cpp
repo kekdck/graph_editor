@@ -36,15 +36,23 @@ void GraphMlSaver::addNode(GraphNode *node)
     writer->writeStartElement("data");
     writer->writeAttribute("id", "path");
     writer->writeCharacters(node->filePath());
+    writer->writeAttribute("id", "x");
+    writer->writeCharacters(QString::number(node->mdata->x()));
+    writer->writeAttribute("id", "y");
+    writer->writeCharacters(QString::number(node->mdata->x()));
     writer->writeEndElement();//data path
 
-    //write cooment data
+    //write comment data
     if (node->getCommentText() != QString(""))
     {
         writer->writeStartElement("data");
         writer->writeAttribute("id", "comment");
         writer->writeCDATA(node->getCommentText());
-        writer->writeEndElement();//data comment
+        writer->writeAttribute("id", "x");
+        writer->writeCharacters(QString::number(node->mdata->childItems().first()->x()));
+        writer->writeAttribute("id", "y");
+        writer->writeCharacters(QString::number(node->mdata->childItems().first()->x()));
+        writer->writeEndElement();//data
     }
 
     writer->writeEndElement();//node
@@ -56,13 +64,17 @@ void GraphMlSaver::addEdge(GraphEdge *edge)
     writer->writeAttribute("source", QString::number(edge->getSrc()->getId()));
     writer->writeAttribute("target",  QString::number(edge->getDest()->getId()));
 
-    //write cooment data
+    //write comment data
     if (edge->getCommentText() != QString(""))
     {
         writer->writeStartElement("data");
         writer->writeAttribute("id", "comment");
         writer->writeCDATA(edge->getCommentText());
-        writer->writeEndElement();//data comment
+        writer->writeAttribute("id", "x");
+        writer->writeCDATA(QString::number(edge->mdata->childItems().first()->x()));
+        writer->writeAttribute("id", "y");
+        writer->writeCDATA(QString::number(edge->mdata->childItems().first()->x()));
+        writer->writeEndElement();//data
     }
 
     writer->writeEndElement();//node
@@ -97,15 +109,17 @@ void GraphMlSaver::save(GraphModel *_model)
     writer->writeAttribute("xmlns", "http://graphml.graphdrawing.org/xmlns");
 
     //Set keys for node
-    addKey("type", "node", "srting");
+    addKey("type", "node", "string");
     addKey("path", "node", "string");
     addKey("comment", "node", "string");
-    //jsut in case
-    addKey("x", "node", "int");
-    addKey("y", "node", "int");
+    //just in case
+    addKey("x", "node", "double");
+    addKey("y", "node", "double");
 
     //Set keys for edge
     addKey("comment", "edge", "string");
+    addKey("x", "edge", "double");
+    addKey("y", "edge", "double");
 
     addGraph();
 

@@ -45,23 +45,21 @@ GraphVisEdge *GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
     return visEdge;
 }
 
-void GraphScene::addComment(GraphVisNode *node, QString commentText)
+void GraphScene::addComment(GraphVisNode *node, QString commentText, QPointF pos)
 {
     QGraphicsTextItem* comment = new QGraphicsTextItem(commentText, node);
     node->mdata->comment = comment->document();
-    comment->setPos(node->boundingRect().center().x() + 30,
-                    node->boundingRect().center().y() + 30);
+    comment->setPos(pos);
     comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 
     //Item is already added when created by passing parent
 }
 
-void GraphScene::addComment(GraphVisEdge *edge, QString commentText)
+void GraphScene::addComment(GraphVisEdge *edge, QString commentText, QPointF pos)
 {
     QGraphicsTextItem* comment = new QGraphicsTextItem(commentText, edge);
     edge->mdata->comment = comment->document();
-    comment->setPos(edge->boundingRect().center().x() + 10,
-                    edge->boundingRect().center().y() + 15);
+    comment->setPos(pos);
     comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 }
 
