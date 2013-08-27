@@ -23,6 +23,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    int edgeCount();
     void eraseEdges(GraphNode *);
 
     GraphEdge *addEdge(GraphNode *, GraphNode *);

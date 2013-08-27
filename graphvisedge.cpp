@@ -17,6 +17,7 @@ GraphVisEdge::GraphVisEdge(GraphEdge *_data, QGraphicsItem *parent) :
 
 void GraphVisEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    refreshGeometry();
     painter->setPen(pen());
 #ifdef QT_DEBUG
     //qDebug() << *this;

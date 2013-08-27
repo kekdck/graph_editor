@@ -130,6 +130,11 @@ Qt::ItemFlags GraphModel::flags(const QModelIndex &index) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
+int GraphModel::edgeCount()
+{
+    return edges.size();
+}
+
 void GraphModel::eraseEdges(GraphNode *n)
 {
     foreach(GraphEdge *e, n->getInEdges())

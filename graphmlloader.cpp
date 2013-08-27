@@ -21,12 +21,13 @@ void GraphMlLoader::getNode()
     
     while(!(reader.tokenType() == QXmlStreamReader::EndElement && reader.name() == "node"))
     {
-        if(reader.tokenType() == QXmlStreamReader::StartElement && reader.name() == "data")
+        if(reader.tokenType() == QXmlStreamReader::StartElement && reader.name() == "data") //We found "data"
         {
 
+            //Read data's attributes
             QXmlStreamAttributes attributes = reader.attributes();
 
-            reader.readNext();//go to data
+            reader.readNext();//Read data's attributes data
 
             if(attributes.value("id").toString() == "path")
             {

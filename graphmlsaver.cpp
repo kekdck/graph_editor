@@ -42,8 +42,8 @@ void GraphMlSaver::addNode(GraphNode *node)
     if (node->getCommentText() != QString(""))
     {
         addData("comment", node->getCommentText());
-        addData("xComment", QString::number(node->mdata->childItems().first()->x()));
-        addData("yComment", QString::number(node->mdata->childItems().first()->y()));
+        addData("comx", QString::number(node->mdata->childItems().first()->x()));
+        addData("comy", QString::number(node->mdata->childItems().first()->y()));
     }
 
     writer->writeEndElement();//node
@@ -53,17 +53,17 @@ void GraphMlSaver::addEdge(GraphEdge *edge)
 {
     writer->writeStartElement("edge");
     writer->writeAttribute("source", QString::number(edge->getSrc()->getId()));
-    writer->writeAttribute("target",  QString::number(edge->getDest()->getId()));
+    writer->writeAttribute("target", QString::number(edge->getDest()->getId()));
 
     //write comment data
     if (edge->getCommentText() != QString(""))
     {        
         addData("comment", edge->getCommentText());
-        addData("xComment", QString::number(edge->mdata->childItems().first()->x()));
-        addData("yComment", QString::number(edge->mdata->childItems().first()->y()));
+        addData("comx", QString::number(edge->mdata->childItems().first()->x()));
+        addData("comy", QString::number(edge->mdata->childItems().first()->y()));
     }
 
-    writer->writeEndElement();//node
+    writer->writeEndElement();//edge
 }
 
 
@@ -72,13 +72,17 @@ void GraphMlSaver::addGraph(QString id)
     writer->writeStartElement("graph"); //Open graph tag
     writer->writeAttribute("id", id);
 
-    foreach(GraphNode* node, model->getNodes())
+    for (int i = 0; i < model->rowCount(); i++)
     {
+        GraphNode *node = qvariant_cast<GraphNode *>(model->data(model->index(i),
+                                                                 GraphModel::ItemDataRole::SaveNodeRole));
         addNode(node);
     }
 
-    foreach(GraphEdge* edge, model->getEdges())
+    for (int i = 0; i < model->edgeCount(); i++)
     {
+        GraphEdge *edge = qvariant_cast<GraphEdge *>(model->data(model->index(i),
+                                                                 GraphModel::ItemDataRole::SaveEdgeRole));
         addEdge(edge);
     }
 
@@ -94,8 +98,11 @@ void GraphMlSaver::addData(QString key, QString value, bool cdata)
     {
         writer->writeCDATA(value);
     }
-    writer->writeCharacters(value);
-    writer->writeEndElement();//data comment
+    else
+    {
+        writer->writeCharacters(value);
+    }
+    writer->writeEndElement();//data
 
 }
 
@@ -112,9 +119,12 @@ void GraphMlSaver::save(GraphModel *_model)
     addKey("type", "node", "string");
     addKey("path", "node", "string");
     addKey("comment", "node", "string");
-    //just in case
     addKey("x", "node", "double");
     addKey("y", "node", "double");
+
+    //Keys for comment
+    addKey("comx", "comment", "double");
+    addKey("comy", "comment", "double");
 
     //Set keys for edge
     addKey("comment", "edge", "string");

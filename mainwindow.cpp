@@ -94,15 +94,12 @@ void MainWindow::loadSettings()
     }
 
     //Check if it is the first run
-    if (settings->value("firstrun").toBool())
+    if (settings->value("firstrun").toBool() == false)
     {
         QMessageBox::information(this,
-                                 "First run",
-                                 "Welcome to our graphEditor!",
+                                 tr("First run"),
+                                 tr("Welcome to our graphEditor!"),
                                  QMessageBox::NoButton);
-    }
-    else
-    {
         settings->setValue("firstrun", QVariant(true));
     }
 }
@@ -114,13 +111,20 @@ void MainWindow::saveSettings()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save graph"),
+                                                    settings->value("savedir").toString(),
+                                                    tr("XML files (*.xml)"),
+                                                    0, QFileDialog::DontUseNativeDialog);
 
     if(fileName == QString(""))
     {
         return;
     }
 
+    if(fileName.section(".", -1, -1) != "xml")
+    {
+        fileName.append(".xml");
+    }
     GraphMlSaver saver(fileName);
     saver.save(Gmodel);
 }
@@ -304,17 +308,23 @@ void MainWindow::on_actionGrid_toggled(bool arg1)
 
 void MainWindow::on_actionOpen_triggered()
 {
-    delete Gmodel;
-    delete scene;
-    QString filePath = QFileDialog::getOpenFileName(this);
+    QString filePath = QFileDialog::getOpenFileName(this,
+                                                    "Open graph",
+                                                    settings->value("opendir").toString(),
+                                                    tr("XML files (*.xml)"),
+                                                    0, QFileDialog::DontUseNativeDialog);
 
     if(filePath == QString(""))
     {
         return;
     }
 
+    delete Gmodel;
+    delete scene;
     GraphMlLoader loader(filePath);
     scene = loader.getGraph();
+    ui->actionGrid->toggle();
+    ui->actionGrid->toggle();
     Gmodel = scene->getGraphModel();
     ui->graphicsView->setScene(scene);
 }
