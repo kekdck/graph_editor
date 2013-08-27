@@ -86,11 +86,15 @@ void GraphMlSaver::addGraph(QString id)
 }
 
 
-void GraphMlSaver::addData(QString key, QString value)
+void GraphMlSaver::addData(QString key, QString value, bool cdata)
 {
     writer->writeStartElement("data");
     writer->writeAttribute("id", key);
-    writer->writeCDATA(value);
+    if(cdata == true)
+    {
+        writer->writeCDATA(value);
+    }
+    writer->writeCharacters(value);
     writer->writeEndElement();//data comment
 
 }
