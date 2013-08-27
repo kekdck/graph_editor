@@ -24,6 +24,8 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     int edgeCount();
+
+    bool disconnectNodes(GraphNode *, GraphNode *);
     void eraseEdges(GraphNode *);
 
     GraphEdge *addEdge(GraphNode *, GraphNode *);

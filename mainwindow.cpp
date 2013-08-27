@@ -168,7 +168,12 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
 
 void MainWindow::on_actionNew_triggered()
 {
-    scene->clear();
+    delete Gmodel;
+    delete scene;
+    Gmodel = new GraphModel(this);
+    scene = new GraphScene(Gmodel, -1000, -1000, 2000, 2000, this);
+    scene->setGraphModel(Gmodel);
+    ui->graphicsView->setScene(scene);
 }
 
 void MainWindow::on_actionAdd_triggered()
@@ -221,22 +226,13 @@ void MainWindow::on_actionRemove_triggered()
 
 void MainWindow::on_actionConnect_triggered()
 {
-    QList<QGraphicsItem *> items =  scene->selectedItems();
-    QList<GraphVisNode *> gvns;
-    foreach (QGraphicsItem *it, items)
-    {
-        GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(it);
-        if (gvn)
-        {
-            gvns.push_back(gvn);
-        }
-    }
+    QList<GraphVisNode *> nodes = scene->selectedNodes();
 
-    if (gvns.length() == 2)
+    if (nodes.length() == 2)
     {
-        if (!gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata))
+        if (!nodes.at(0)->connectedDirectlyTo(nodes.at(1)->mdata))
         {
-            scene->addEdge(gvns.at(0), gvns.at(1));
+            scene->addEdge(nodes.at(0), nodes.at(1));
         }
     }
     scene->clearSelection();
@@ -284,9 +280,7 @@ void MainWindow::on_actionDisconnect_triggered()
         Gmodel->eraseEdges(gvns.at(0)->mdata);
         break;
     case 2:
-        GraphEdge *e = gvns.at(0)->connectedDirectlyTo(gvns.at(1)->mdata);
-        if (e)
-            Gmodel->removeEdge(e);
+        Gmodel->disconnectNodes(gvns.at(0)->mdata, gvns.at(1)->mdata);
         break;
     }
     scene->clearSelection();
@@ -314,11 +308,13 @@ void MainWindow::on_actionOpen_triggered()
                                                     tr("XML files (*.xml)"),
                                                     0, QFileDialog::DontUseNativeDialog);
 
+    QString ext = filePath.section(".", -1, -1);
     if(filePath == QString(""))
     {
         return;
     }
 
+    //process different file extensions as you wish by using if (ext == "xml") etc.
     delete Gmodel;
     delete scene;
     GraphMlLoader loader(filePath);

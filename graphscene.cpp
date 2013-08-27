@@ -68,6 +68,36 @@ void GraphScene::init()
 
 }
 
+QList<GraphVisNode *> GraphScene::selectedNodes()
+{
+    QList<QGraphicsItem *> items =  selectedItems();
+    QList<GraphVisNode *> gvns;
+    foreach (QGraphicsItem *it, items)
+    {
+        GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(it);
+        if (gvn)
+        {
+            gvns.push_back(gvn);
+        }
+    }
+    return gvns;
+}
+
+QList<GraphVisEdge *> GraphScene::selectedEdges()
+{
+    QList<QGraphicsItem *> items =  selectedItems();
+    QList<GraphVisEdge *> gves;
+    foreach (QGraphicsItem *it, items)
+    {
+        GraphVisEdge *gve = dynamic_cast<GraphVisEdge *>(it);
+        if (gve)
+        {
+            gves.push_back(gve);
+        }
+    }
+    return gves;
+}
+
 GraphModel *GraphScene::getGraphModel() const
 {
     return graphModel;

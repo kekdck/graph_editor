@@ -29,6 +29,9 @@ public:
 
     void init();
 
+    QList<GraphVisNode *> selectedNodes();
+    QList<GraphVisEdge *> selectedEdges();
+
     QFileSystemModel *getFileModel() const;
     void setFileModel(QFileSystemModel *value);
 

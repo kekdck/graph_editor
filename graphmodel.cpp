@@ -135,6 +135,17 @@ int GraphModel::edgeCount()
     return edges.size();
 }
 
+bool GraphModel::disconnectNodes(GraphNode *n1, GraphNode *n2)
+{
+    GraphEdge *e = n1->connectedDirectlyTo(n2);
+    if (e)
+    {
+        removeEdge(e);
+        return true;
+    }
+    return false;
+}
+
 void GraphModel::eraseEdges(GraphNode *n)
 {
     foreach(GraphEdge *e, n->getInEdges())

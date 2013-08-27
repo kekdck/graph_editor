@@ -4,7 +4,11 @@ GraphMlLoader::GraphMlLoader(const QString filePath)
 {
     QFile *file = new QFile(filePath);
 
-    file->open((QIODevice::ReadOnly | QIODevice::Text));
+    if (!file->open((QIODevice::ReadOnly | QIODevice::Text)))
+    {
+        QMessageBox::critical(0, "Error", "Error occured while trying to open file.",
+                              QMessageBox::Ok, QMessageBox::NoButton);
+    }
 
 
     Gmodel = new GraphModel();
