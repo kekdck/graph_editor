@@ -23,6 +23,9 @@ public:
 
     void addGraph(QString id = "");
 
+    void addData(QString key, QString value, bool cdata = false);
+
+
 public slots:
     void save(GraphModel* _model);
 

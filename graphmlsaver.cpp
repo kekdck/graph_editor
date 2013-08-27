@@ -32,34 +32,18 @@ void GraphMlSaver::addNode(GraphNode *node)
     writer->writeStartElement("node");
     writer->writeAttribute("id", QString::number(node->getId()));
 
-    //write path data
-    writer->writeStartElement("data");
-    writer->writeAttribute("id", "path");
-    writer->writeCharacters(node->filePath());
-    writer->writeEndElement();//data path
+    addData("path", node->filePath());
 
-    //write x coord
-    writer->writeStartElement("data");
-    writer->writeAttribute("id", "x");
-    writer->writeCharacters(QString::number(node->mdata->x()));
-    writer->writeEndElement();//x coord
-
-    //write y coord
-    writer->writeStartElement("data");
-    writer->writeAttribute("id", "y");
-    writer->writeCharacters(QString::number(node->mdata->y()));
-    writer->writeEndElement();//y coord
+    addData("x", QString::number(node->mdata->x()));
+    addData("y", QString::number(node->mdata->y()));
 
 
     //write comment data
     if (node->getCommentText() != QString(""))
     {
-        writer->writeStartElement("data");
-        writer->writeAttribute("id", "comment");
-        writer->writeAttribute("x", QString::number(node->mdata->childItems().first()->x()));
-        writer->writeAttribute("y", QString::number(node->mdata->childItems().first()->x()));
-        writer->writeCDATA(node->getCommentText());
-        writer->writeEndElement();//data
+        addData("comment", node->getCommentText());
+        addData("xComment", QString::number(node->mdata->childItems().first()->x()));
+        addData("yComment", QString::number(node->mdata->childItems().first()->y()));
     }
 
     writer->writeEndElement();//node
@@ -73,13 +57,10 @@ void GraphMlSaver::addEdge(GraphEdge *edge)
 
     //write comment data
     if (edge->getCommentText() != QString(""))
-    {
-        writer->writeStartElement("data");
-        writer->writeAttribute("id", "comment");
-        writer->writeCDATA(edge->getCommentText());
-        writer->writeAttribute("x", QString::number(edge->mdata->childItems().first()->x()));
-        writer->writeAttribute("y", QString::number(edge->mdata->childItems().first()->y()));
-        writer->writeEndElement();//data
+    {        
+        addData("comment", edge->getCommentText());
+        addData("xComment", QString::number(edge->mdata->childItems().first()->x()));
+        addData("yComment", QString::number(edge->mdata->childItems().first()->y()));
     }
 
     writer->writeEndElement();//node
@@ -102,6 +83,16 @@ void GraphMlSaver::addGraph(QString id)
     }
 
     writer->writeEndElement();//Close graph tag
+}
+
+
+void GraphMlSaver::addData(QString key, QString value)
+{
+    writer->writeStartElement("data");
+    writer->writeAttribute("id", key);
+    writer->writeCDATA(value);
+    writer->writeEndElement();//data comment
+
 }
 
 void GraphMlSaver::save(GraphModel *_model)
