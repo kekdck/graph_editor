@@ -36,22 +36,29 @@ void GraphMlSaver::addNode(GraphNode *node)
     writer->writeStartElement("data");
     writer->writeAttribute("id", "path");
     writer->writeCharacters(node->filePath());
+    writer->writeEndElement();//data path
+
+    //write x coord
+    writer->writeStartElement("data");
     writer->writeAttribute("id", "x");
     writer->writeCharacters(QString::number(node->mdata->x()));
+    writer->writeEndElement();//x coord
+
+    //write y coord
+    writer->writeStartElement("data");
     writer->writeAttribute("id", "y");
-    writer->writeCharacters(QString::number(node->mdata->x()));
-    writer->writeEndElement();//data path
+    writer->writeCharacters(QString::number(node->mdata->y()));
+    writer->writeEndElement();//y coord
+
 
     //write comment data
     if (node->getCommentText() != QString(""))
     {
         writer->writeStartElement("data");
         writer->writeAttribute("id", "comment");
+        writer->writeAttribute("x", QString::number(node->mdata->childItems().first()->x()));
+        writer->writeAttribute("y", QString::number(node->mdata->childItems().first()->x()));
         writer->writeCDATA(node->getCommentText());
-        writer->writeAttribute("id", "x");
-        writer->writeCharacters(QString::number(node->mdata->childItems().first()->x()));
-        writer->writeAttribute("id", "y");
-        writer->writeCharacters(QString::number(node->mdata->childItems().first()->x()));
         writer->writeEndElement();//data
     }
 
@@ -70,10 +77,8 @@ void GraphMlSaver::addEdge(GraphEdge *edge)
         writer->writeStartElement("data");
         writer->writeAttribute("id", "comment");
         writer->writeCDATA(edge->getCommentText());
-        writer->writeAttribute("id", "x");
-        writer->writeCDATA(QString::number(edge->mdata->childItems().first()->x()));
-        writer->writeAttribute("id", "y");
-        writer->writeCDATA(QString::number(edge->mdata->childItems().first()->x()));
+        writer->writeAttribute("x", QString::number(edge->mdata->childItems().first()->x()));
+        writer->writeAttribute("y", QString::number(edge->mdata->childItems().first()->y()));
         writer->writeEndElement();//data
     }
 

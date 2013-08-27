@@ -32,17 +32,20 @@ void GraphMlLoader::getNode()
             {
                 path = reader.text().toString();
             }
+            if(attributes.value("id").toString() == "x")
+            {
+                pos.setX(reader.text().toString().toDouble());
+            }
+            if(attributes.value("id").toString() == "y")
+            {
+                pos.setY(reader.text().toString().toDouble());
+            }
             if(attributes.value("id").toString() == "comment")
             {
                 comment = reader.text().toString();
-                if(attributes.value("id").toString() == "x")
-                {
-                    pos.setX(reader.text().toString().toDouble());
-                }
-                if(attributes.value("id").toString() == "y")
-                {
-                    pos.setY(reader.text().toString().toDouble());
-                }
+
+                compos.setX(attributes.value("x").toString().toDouble());
+                compos.setY(attributes.value("y").toString().toDouble());
             }
         }
         reader.readNext();
@@ -88,14 +91,9 @@ void GraphMlLoader::getEdge()
             if(attributes.value("id").toString() == "comment")
             {
                 comment = reader.text().toString();
-                if(attributes.value("id").toString() == "x")
-                {
-                    pos.setX(reader.text().toString().toDouble());
-                }
-                if(attributes.value("id").toString() == "y")
-                {
-                    pos.setY(reader.text().toString().toDouble());
-                }
+
+                pos.setX(attributes.value("x").toString().toDouble());
+                pos.setY(attributes.value("y").toString().toDouble());
             }
         }
 
