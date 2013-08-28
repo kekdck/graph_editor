@@ -47,7 +47,9 @@ GraphVisEdge *GraphScene::addEdge(GraphVisNode *source, GraphVisNode *destin)
 
 void GraphScene::addComment(GraphVisNode *node, QString commentText, QPointF pos)
 {
-    QGraphicsTextItem* comment = new QGraphicsTextItem(commentText, node);
+    commentText = "<div style='background-color:#FFFFFF;'>" + commentText + "</div>";
+    QGraphicsTextItem* comment = new QGraphicsTextItem(node);
+    comment->setHtml(commentText);
     node->mdata->comment = comment->document();
     comment->setPos(pos);
     comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
@@ -57,7 +59,9 @@ void GraphScene::addComment(GraphVisNode *node, QString commentText, QPointF pos
 
 void GraphScene::addComment(GraphVisEdge *edge, QString commentText, QPointF pos)
 {
-    QGraphicsTextItem* comment = new QGraphicsTextItem(commentText, edge);
+    commentText = "<div style='background-color:#FFFFFF;'>" + commentText + "</div>";
+    QGraphicsTextItem* comment = new QGraphicsTextItem(edge);
+    comment->setHtml(commentText);
     edge->mdata->comment = comment->document();
     comment->setPos(pos);
     comment->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
@@ -68,9 +72,42 @@ void GraphScene::init()
 
 }
 
+QList<GraphVisNode *> GraphScene::nodes()
+{
+    QList<QGraphicsItem *> items = this->items();
+    QList<GraphVisNode *> gvns;
+    foreach (QGraphicsItem *it, items)
+    {
+        GraphVisNode *gvn = dynamic_cast<GraphVisNode *>(it);
+        if (gvn)
+        {
+            gvns.push_back(gvn);
+        }
+    }
+    return gvns;
+}
+
+QPointF GraphScene::cg(QList<GraphVisNode *> l)
+{
+    if (l == QList<GraphVisNode *>())
+    {
+         l = nodes();
+    }
+    if (l.size() == 0)
+    {
+        return QPointF(0,0);
+    }
+    QPointF t(0,0);
+    foreach(GraphVisNode *gvn, l)
+    {
+        t += gvn->pos();
+    }
+    return t/l.size();
+}
+
 QList<GraphVisNode *> GraphScene::selectedNodes()
 {
-    QList<QGraphicsItem *> items =  selectedItems();
+    QList<QGraphicsItem *> items = selectedItems();
     QList<GraphVisNode *> gvns;
     foreach (QGraphicsItem *it, items)
     {

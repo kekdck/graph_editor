@@ -19,9 +19,12 @@ GraphMlLoader::GraphMlLoader(const QString filePath)
 
 void GraphMlLoader::getNode()
 {        
-    QString path = "";
-    QString comment = "";
-    QPointF pos(0,0), compos(0,0);
+    QString path = "",
+            comment = "",
+            name = "";
+    QPointF pos(0,0),
+            compos(0,0);
+    QColor  col;
     
     while(!(reader.tokenType() == QXmlStreamReader::EndElement && reader.name() == "node"))
     {
@@ -52,17 +55,34 @@ void GraphMlLoader::getNode()
                 compos.setX(attributes.value("x").toString().toDouble());
                 compos.setY(attributes.value("y").toString().toDouble());
             }
+            if(attributes.value("id").toString() == "color")
+            {
+                col.setNamedColor(reader.text().toString());
+            }
+            if(attributes.value("id").toString() == "name")
+            {
+                name = reader.text().toString();
+            }
         }
         reader.readNext();
     }
     
     if(path == "")
+    {
+        QMessageBox::warning(0, "Wrong path",
+                             "Wrong path was given in "
+                             + QString::number(reader.lineNumber())
+                             + " line. \nNode will not be loaded.",
+                             QMessageBox::Ok, QMessageBox::NoButton);
         return;
+    }
     
     QFileInfo *fileInfo = new QFileInfo(path);
     
     GraphVisNode* node = graph->addNode(fileInfo);
     node->setPos(pos);
+    node->setColor(col);
+    node->setNameText(name);
 
     if(comment != "")
     {
@@ -74,6 +94,7 @@ void GraphMlLoader::getEdge()
 {
     QString comment = "";
     QPointF pos(0,0), compos(0,0);
+    QColor col;
 
     int target_id = 0;
     int source_id = 0;
@@ -99,6 +120,10 @@ void GraphMlLoader::getEdge()
 
                 pos.setX(attributes.value("x").toString().toDouble());
                 pos.setY(attributes.value("y").toString().toDouble());
+            }
+            if(attributes.value("color").toString() == "color")
+            {
+                col.setNamedColor(reader.text().toString());
             }
         }
 

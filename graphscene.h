@@ -29,6 +29,7 @@ public:
 
     void init();
 
+
     QList<GraphVisNode *> selectedNodes();
     QList<GraphVisEdge *> selectedEdges();
 
@@ -38,6 +39,8 @@ public:
     GraphModel *getGraphModel() const;
     void setGraphModel(GraphModel *value);
 
+    QList<GraphVisNode *> nodes();
+    QPointF cg(QList<GraphVisNode *> l = QList<GraphVisNode *>());
 private:
 
     QFileSystemModel *fileModel;

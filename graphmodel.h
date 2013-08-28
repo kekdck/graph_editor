@@ -10,8 +10,8 @@ class GraphModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum ItemDataRole {
-        SaveNodeRole = Qt::UserRole + 1,
-        SaveEdgeRole = Qt::UserRole + 2
+        RefNodeRole = Qt::UserRole + 1,
+        RefEdgeRole = Qt::UserRole + 2
     };
 
     explicit GraphModel(QObject *parent = 0);

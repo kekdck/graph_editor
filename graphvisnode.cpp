@@ -13,23 +13,9 @@ GraphVisNode::GraphVisNode(GraphNode *data, qreal x, qreal y, qreal w, qreal h, 
 
     setBrush(QBrush( (fileInfo->isDir()) ? Qt::green : Qt::yellow));
 
-    //Check if Node's name is too long and cut it if so
-    QString fn =
-            (fileInfo->isRoot()) ?           //if
-                fileInfo->absolutePath() :   //then
-                fileInfo->fileName();        //else
-    if (fn.length()>15)
-    {
-        fn.chop(fn.length()-12);
-        fn.append("...");
-    }
-
-    nameText = new QGraphicsTextItem(data->name, this);
-    nameText->setHtml("<div style='background-color:#FFFFFF;'>" + fn + "</div>");
-    mdata->name = fileInfo->fileName();
-
-    QPointF thisPos(QPointF(boundingRect().width()/2 - nameText->boundingRect().width()/2, -25));
-    nameText->setPos(thisPos);
+    nameText = new QGraphicsTextItem(this);
+    nameText->setAcceptedMouseButtons(Qt::NoButton);
+    setNameText(fileInfo->fileName());
 }
 
 GraphVisNode::~GraphVisNode()
@@ -142,6 +128,26 @@ void GraphVisNode::eraseEdges()
     mdata->eraseEdges();
 }
 
+void GraphVisNode::setNameText(QString s)
+{
+    mdata->name = s;
+    if (s.length()>15)
+    {
+        s.chop(s.length()-12);
+        s.append("...");
+    }
+
+    nameText->setHtml("<div style='background-color:#FFFFFF;'>" + s + "</div>");
+    QPointF thisPos(QPointF(boundingRect().width()/2 - nameText->boundingRect().width()/2, -25));
+    nameText->setPos(thisPos);
+}
+
+void GraphVisNode::setColor(QColor col)
+{
+    QBrush br = brush();
+    br.setColor(col);
+    setBrush(br);
+}
 
 void GraphVisNode::removeEdge(GraphEdge *edge)
 {

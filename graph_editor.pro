@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     graphvisedge.cpp \
     graphvisnode.cpp \
     graphmlloader.cpp \
-    graphmlsaver.cpp
+    graphmlsaver.cpp \
+    editnodedialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -36,9 +37,11 @@ HEADERS  += mainwindow.h \
     graphvisedge.h \
     graphvisnode.h \
     graphmlloader.h \
-    graphmlsaver.h
+    graphmlsaver.h \
+    editnodedialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    editnodedialog.ui
 
 RESOURCES += \
     icons.qrc

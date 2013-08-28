@@ -42,6 +42,7 @@ public:
     virtual ~MainWindow();
 
     void createMenus();
+    void openFile(QString path);
 
 private slots:
 
@@ -65,6 +66,8 @@ private slots:
     void on_actionGrid_toggled(bool arg1);
 
     void on_actionOpen_triggered();
+
+    void on_listView_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow  *ui;

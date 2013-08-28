@@ -32,11 +32,12 @@ void GraphMlSaver::addNode(GraphNode *node)
     writer->writeStartElement("node");
     writer->writeAttribute("id", QString::number(node->getId()));
 
+    addData("name", node->name);
     addData("path", node->filePath());
 
     addData("x", QString::number(node->mdata->x()));
     addData("y", QString::number(node->mdata->y()));
-
+    addData("color", node->mdata->brush().color().name());
 
     //write comment data
     if (node->getCommentText() != QString(""))
@@ -54,6 +55,9 @@ void GraphMlSaver::addEdge(GraphEdge *edge)
     writer->writeStartElement("edge");
     writer->writeAttribute("source", QString::number(edge->getSrc()->getId()));
     writer->writeAttribute("target", QString::number(edge->getDest()->getId()));
+
+    addData("name", edge->name);
+    addData("color", edge->mdata->pen().color().name());
 
     //write comment data
     if (edge->getCommentText() != QString(""))
@@ -75,14 +79,14 @@ void GraphMlSaver::addGraph(QString id)
     for (int i = 0; i < model->rowCount(); i++)
     {
         GraphNode *node = qvariant_cast<GraphNode *>(model->data(model->index(i),
-                                                                 GraphModel::ItemDataRole::SaveNodeRole));
+                                                                 GraphModel::ItemDataRole::RefNodeRole));
         addNode(node);
     }
 
     for (int i = 0; i < model->edgeCount(); i++)
     {
         GraphEdge *edge = qvariant_cast<GraphEdge *>(model->data(model->index(i),
-                                                                 GraphModel::ItemDataRole::SaveEdgeRole));
+                                                                 GraphModel::ItemDataRole::RefEdgeRole));
         addEdge(edge);
     }
 
@@ -117,19 +121,23 @@ void GraphMlSaver::save(GraphModel *_model)
 
     //Set keys for node
     addKey("type", "node", "string");
+    addKey("name", "node", "string");
     addKey("path", "node", "string");
-    addKey("comment", "node", "string");
     addKey("x", "node", "double");
     addKey("y", "node", "double");
+    addKey("color", "node", "QColor");
+    addKey("comment", "node", "string");
 
     //Keys for comment
     addKey("comx", "comment", "double");
     addKey("comy", "comment", "double");
 
     //Set keys for edge
-    addKey("comment", "edge", "string");
+    addKey("name", "node", "string");
     addKey("x", "edge", "double");
     addKey("y", "edge", "double");
+    addKey("color", "edge", "QColor");
+    addKey("comment", "edge", "string");
 
     addGraph();
 

@@ -100,11 +100,10 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const
     {
     case Qt::DisplayRole:
         return QVariant(nodes.at(index.row())->name).toString();
-    case SaveNodeRole:
+    case RefNodeRole:
         return QVariant::fromValue(nodes.at(index.row()));
-    case SaveEdgeRole:
+    case RefEdgeRole:
         return QVariant::fromValue(edges.at(index.row()));
-
     }
     return QVariant();
 }

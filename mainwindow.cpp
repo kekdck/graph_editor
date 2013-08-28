@@ -81,6 +81,22 @@ void MainWindow::createMenus()
     ui->graphicsView->setContextMenu(menu);
 }
 
+void MainWindow::openFile(QString filePath)
+{
+    QString ext = filePath.section(".", -1, -1);
+    //process different file extensions as you wish by using if (ext == "xml") etc.
+    delete Gmodel;
+    delete scene;
+    GraphMlLoader loader(filePath);
+    scene = loader.getGraph();
+    ui->actionGrid->toggle();
+    ui->actionGrid->toggle();
+    Gmodel = scene->getGraphModel();
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->goToCenter();
+    ui->listView->setModel(Gmodel);
+}
+
 void MainWindow::loadSettings()
 {
     //Setting grid
@@ -102,6 +118,10 @@ void MainWindow::loadSettings()
                                  QMessageBox::NoButton);
         settings->setValue("firstrun", QVariant(true));
     }
+    if(settings->value("recentfile").toString() != "")
+    {
+        openFile(settings->value("recentfile").toString());
+    }
 }
 
 void MainWindow::saveSettings()
@@ -111,21 +131,23 @@ void MainWindow::saveSettings()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save graph"),
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Save graph"),
                                                     settings->value("savedir").toString(),
                                                     tr("XML files (*.xml)"),
                                                     0, QFileDialog::DontUseNativeDialog);
 
-    if(fileName == QString(""))
+    if(filePath == QString(""))
     {
         return;
     }
 
-    if(fileName.section(".", -1, -1) != "xml")
+    settings->setValue("savedir", filePath.section("/", 0, -2) + "/");
+    settings->setValue("recentfile", filePath);
+    if(filePath.section(".", -1, -1) != "xml")
     {
-        fileName.append(".xml");
+        filePath.append(".xml");
     }
-    GraphMlSaver saver(fileName);
+    GraphMlSaver saver(filePath);
     saver.save(Gmodel);
 }
 
@@ -308,19 +330,18 @@ void MainWindow::on_actionOpen_triggered()
                                                     tr("XML files (*.xml)"),
                                                     0, QFileDialog::DontUseNativeDialog);
 
-    QString ext = filePath.section(".", -1, -1);
-    if(filePath == QString(""))
+    if(filePath.isEmpty())
     {
         return;
     }
+    settings->setValue("opendir", filePath.section("/", 0, -2) + "/");
+    settings->setValue("recentfile", filePath);
+    openFile(filePath);
+}
 
-    //process different file extensions as you wish by using if (ext == "xml") etc.
-    delete Gmodel;
-    delete scene;
-    GraphMlLoader loader(filePath);
-    scene = loader.getGraph();
-    ui->actionGrid->toggle();
-    ui->actionGrid->toggle();
-    Gmodel = scene->getGraphModel();
-    ui->graphicsView->setScene(scene);
+void MainWindow::on_listView_doubleClicked(const QModelIndex &index)
+{
+    if (index.isValid())
+        ui->graphicsView->openNodeEdit(qvariant_cast<GraphNode *>(Gmodel->data(index, GraphModel::RefNodeRole))->mdata);
+    return;
 }

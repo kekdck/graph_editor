@@ -27,6 +27,7 @@ public:
 
     void removeEdge(GraphEdge *edge);
     void eraseEdges();
+    void setName(QString);
 
     GraphVisNode *mdata;
 

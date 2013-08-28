@@ -37,6 +37,9 @@ public:
     void eraseEdges();
     //////
 
+    void setNameText(QString);
+    void setColor(QColor);
+
     friend QDebug operator<< (QDebug d, GraphVisNode &item);
     GraphNode *mdata;
 private:

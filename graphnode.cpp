@@ -43,6 +43,12 @@ void GraphNode::eraseEdges()
     qDeleteAll(outEdges);
 }
 
+void GraphNode::setName(QString s)
+{
+    name = s;
+    mdata->setNameText(s);
+}
+
 QList<GraphEdge *> GraphNode::getOutEdges()
 {
     return outEdges;
@@ -55,6 +61,7 @@ QFileInfo *GraphNode::getFileInfo() const
 
 void GraphNode::setFileInfo(QFileInfo *value)
 {
+    delete fileInfo;
     fileInfo = value;
 }
 
