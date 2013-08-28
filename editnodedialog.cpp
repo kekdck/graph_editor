@@ -93,11 +93,9 @@ void editNodeDialog::on_pathDirToolButton_clicked()
     QFileDialog fd;
     fd.setFileMode(QFileDialog::Directory);
     fd.setOption(QFileDialog::ShowDirsOnly, true);
-    QString filePath = fd.getOpenFileName(this,
-                                          "Select directory",
-                                          node->filePath(),
-                                          tr("Any files (*)"),
-                                          0,
-                                          QFileDialog::DontUseNativeDialog);
+    QString filePath = fd.getExistingDirectory(this,
+                                               "Select directory",
+                                               node->filePath(),
+                                               QFileDialog::DontUseNativeDialog);
     ui->pathEdit->setText(filePath);
 }
