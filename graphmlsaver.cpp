@@ -79,14 +79,14 @@ void GraphMlSaver::addGraph(QString id)
     for (int i = 0; i < model->rowCount(); i++)
     {
         GraphNode *node = qvariant_cast<GraphNode *>(model->data(model->index(i),
-                                                                 GraphModel::ItemDataRole::RefNodeRole));
+                                                                 GraphModel::RefNodeRole));
         addNode(node);
     }
 
     for (int i = 0; i < model->edgeCount(); i++)
     {
         GraphEdge *edge = qvariant_cast<GraphEdge *>(model->data(model->index(i),
-                                                                 GraphModel::ItemDataRole::RefEdgeRole));
+                                                                 GraphModel::RefEdgeRole));
         addEdge(edge);
     }
 

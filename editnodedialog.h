@@ -22,16 +22,16 @@ public:
     
 private slots:
     void on_pathToolButton_clicked();
+    void markName();
+    void setColor();
+    void setupGUI();
+    void acceptEdit();
 
     void on_pathDirToolButton_clicked();
 
 private:
     GraphNode *node;
     Ui::editNodeDialog *ui;
-    void markName();
-    void setColor();
-    void setupGUI();
-    void acceptEdit();
 };
 
 #endif // EDITNODEDIALOG_H

@@ -48,10 +48,10 @@ void editNodeDialog::setupGUI()
     }
     ui->consLabel->setText(QString::number(node->connections()));
     ui->pathEdit->setText(node->filePath());
-    connect(ui->colorToolButton, &QToolButton::clicked, this, &editNodeDialog::setColor);
-    connect(ui->cancelButton, &QPushButton::clicked, this, &editNodeDialog::close);
-    connect(ui->OkButton, &QPushButton::clicked, this, &editNodeDialog::acceptEdit);
-    connect(ui->nameEdit, &QLineEdit::textChanged, this, &editNodeDialog::markName);
+    connect(ui->colorToolButton, SIGNAL(clicked()), this, SLOT(setColor()));
+    connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->OkButton, SIGNAL(clicked()), this, SLOT(acceptEdit()));
+    connect(ui->nameEdit, SIGNAL(textChanged()), this, SLOT(markName()));
 }
 
 void editNodeDialog::acceptEdit()

@@ -38,30 +38,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     //Connecting actions
     //calling edit window
-    connect(ui->pushEditButton, &QPushButton::clicked, ui->actionEdit, &QAction::trigger);
-    connect(ui->actionEdit, &QAction::triggered, ui->graphicsView, &GraphView::openEdit);
+    connect(ui->pushEditButton, SIGNAL(clicked()), ui->actionEdit, SLOT(trigger()));
+    connect(ui->actionEdit,  SIGNAL(triggered()), ui->graphicsView, SLOT(openEdit()));
     //add node
-    connect(ui->pushAddButton, &QPushButton::clicked, ui->actionAdd, &QAction::trigger);
+    connect(ui->pushAddButton,  SIGNAL(clicked()), ui->actionAdd, SLOT(trigger()));
     //add comment
-    connect(ui->pushCommentButton, &QPushButton::clicked, ui->actionAddComment, &QAction::trigger);
+    connect(ui->pushCommentButton,  SIGNAL(clicked()), ui->actionAddComment, SLOT(trigger()));
     //remove
-    connect(ui->pushRemoveButton, &QPushButton::clicked, ui->actionRemove, &QAction::trigger);
+    connect(ui->pushRemoveButton,  SIGNAL(clicked()), ui->actionRemove, SLOT(trigger()));
     //connecting
-    connect(ui->pushConnectButton, &QPushButton::clicked, ui->actionConnect, &QAction::trigger);
+    connect(ui->pushConnectButton,  SIGNAL(clicked()), ui->actionConnect, SLOT(trigger()));
     //diconnecting
-    connect(ui->pushDisconnectButton, &QPushButton::clicked, ui->actionDisconnect, &QAction::trigger);
+    connect(ui->pushDisconnectButton,  SIGNAL(clicked()), ui->actionDisconnect, SLOT(trigger()));
     //clearing
-    connect(ui->actionClear, &QAction::triggered, scene, &GraphScene::clear);
+    connect(ui->actionClear,  SIGNAL(triggered()), scene, SLOT(clear()));
     //quitting
-    connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
+    connect(ui->actionQuit,  SIGNAL(triggered()), this, SLOT(close()));
     //Zoom buttons
-    connect(ui->actionZoomIn, &QAction::triggered, ui->graphicsView, &GraphView::zoomIn);
-    connect(ui->actionZoomOut, &QAction::triggered, ui->graphicsView, &GraphView::zoomOut);
+    connect(ui->actionZoomIn,  SIGNAL(triggered()), ui->graphicsView, SLOT(zoomIn()));
+    connect(ui->actionZoomOut,  SIGNAL(triggered()), ui->graphicsView, SLOT(zoomOut()));
 
-    connect(ui->zoomInButton, &QPushButton::clicked, ui->actionZoomIn, &QAction::trigger);
-    connect(ui->zoomOutButton, &QPushButton::clicked, ui->actionZoomOut, &QAction::trigger);
+    connect(ui->zoomInButton,  SIGNAL(clicked()), ui->actionZoomIn, SLOT(trigger()));
+    connect(ui->zoomOutButton,  SIGNAL(clicked()), ui->actionZoomOut, SLOT(trigger()));
     //Settings
-    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::saveSettings);
+    connect(ui->actionNew,  SIGNAL(triggered()), this, SLOT(saveSettings()));
 }
 
 MainWindow::~MainWindow()
